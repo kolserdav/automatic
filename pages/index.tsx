@@ -15,7 +15,7 @@ export default function Home() {
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <button onClick={sendMail}>Send</button>
+      {/*<button onClick={sendMail}>Send</button>*/}
     </div>
   )
 }
