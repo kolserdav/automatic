@@ -1,5 +1,7 @@
-module.exports = (phase, { defaultConfig }) => {
-  return {
-    sourceMap: false
-  }
+const path = require('path')
+
+module.exports = {
+  sassOptions: {
+    includePaths: [path.join(__dirname, 'styles')],
+  },
 }

@@ -9,6 +9,7 @@
     "deploy": "yarn build && screen -dmS node yarn start"
   },
   "dependencies": {
+    "classnames": "^2.2.6",
     "express": "^4.17.1",
     "next": "9.5.5",
     "nodemailer": "^6.4.14",
@@ -16,9 +17,11 @@
     "react-dom": "17.0.1"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.10",
     "@types/node": "^14.14.2",
     "@types/nodemailer": "^6.4.0",
     "@types/react": "^16.9.53",
+    "sass": "^1.27.0",
     "typescript": "^4.0.3"
   }
 }
