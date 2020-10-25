@@ -1,3 +1,5 @@
+@import './module.scss';
+
 html,
 body {
   padding: 0;
@@ -13,4 +15,93 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+.container {
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.paddingSmall {
+  padding: 5px;
+}
+
+.fullScreen {
+  height: 100%;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.centerText {
+  text-align: center;
+}
+
+.center {
+  justify-content: center;
+  align-items: center;
+}
+
+.start {
+  align-items: flex-start;
+}
+
+.button {
+  cursor: pointer;
+  z-index: 12;
+}
+
+.button:hover {
+  box-shadow: 0 0 10px rgba(87,38,0,1.0);
+}
+
+.button:active {
+  background-color: $alert-color;
+}
+
+.boldHeader {
+  margin: 0 20px 20px 20px;
+  max-width: 1000px;
+  font-size: xx-large;
+  color: $text-light-color;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.boldHeader.start {
+  margin: 0 15px 8px 8px;
+  text-align: left;
+}
+
+.boldDesc {
+  max-width: 500px;
+  font-weight: 600;
+  padding: 0 40px 40px 40px;
+  font-size: large;
+  line-height: 1.5em;
+  color: $text-color;
+  @media(max-width: 700px) {
+    padding: 0 10px 10px 15px;;
+  }
+}
+
+.boldDesc.big {
+  padding: 40px;
 }

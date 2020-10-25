@@ -1,0 +1,47 @@
+@import '../module.scss';
+
+.stageCards {
+  margin: 40px 0 40px 0;
+  width: 90%;
+  padding: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.stageCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: auto;
+  margin-top: 30px;
+}
+
+.stages {
+  position: relative;
+  padding-top: 40px;
+  width: 100%;
+  height: 100%;
+  background: getColor(0.9);
+}
+
+.stages:after {
+  border-bottom: 3vw solid $primary-color; 
+  bottom: 0;
+  margin-bottom: -1px;
+  content: "";
+  position: absolute;
+}
+.stages:after {
+  border-left: calc(100vw - 12px) solid transparent;
+  left: 0;
+}
+
+.main {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

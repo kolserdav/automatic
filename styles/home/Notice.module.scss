@@ -1,0 +1,37 @@
+@import '../module.scss';
+
+.notice {
+  background: $primary-color;
+}
+
+.line {
+  width: 20%;
+  height: 4px;
+  background-color: $text-color;
+  border-radius: 2px;
+  margin: 80px;
+}
+
+.textNotice {
+  margin: 0 20px 0 20px;
+  line-height: 3em;
+  max-width: 1200px;
+  font-size: large;
+  color: $text-color;
+}
+
+.firstButton {
+  margin: 20vw;
+}
+
+.askButton {
+  width: 200px;
+  padding: 12px;
+  margin-top: 20px;
+  color: #fafafa;
+  background-color: $secondary-color;
+  font-size: large;
+  font-weight: 500;
+  border: 2px solid $alert-color;
+  border-radius: 3px;
+}

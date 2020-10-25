@@ -1,0 +1,61 @@
+@import '../module.scss';
+
+.header {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  background: url('../../public/img/home/header_background.jpg');
+  background-repeat: no-repeat;
+	background-position: center;
+  background-size: cover;
+  @media(max-width: 700px) {
+    background: url('../../public/img/home/header_background_700.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+}
+
+.shadow {
+  background: getColor(0.8);
+}
+
+.headerText {
+  margin: 0 5px 0 5px;
+  max-width: 1000px;
+  font-size: xx-large;
+  line-height: 3em;
+  color: $text-light-color;
+  text-shadow: 1px 1px 2px black, 0 0 1em #fff;
+  @media(max-width: 1000px) {
+    font-size: x-large;
+  }
+  @media(max-width: 700px) {
+    font-size: large;
+  }
+  @media(max-width: 400px) {
+    font-size: medium;
+  }
+  @media(max-width: 400px) and (max-height: 600px) {
+    font-size: xx-small;
+  }
+}
+
+.headerDescription {
+  max-width: 1200px;
+  padding: 40px;
+  font-size: large;
+  line-height: 2em;
+  color: $text-color;
+  text-shadow: 1px 1px 2px black, 0 0 1em #fff;
+  @media(max-width: 1000px) and (max-height: 600px) {
+    font-size: medium;
+  }
+  @media(max-width: 700px) and (max-height: 600px) {
+    font-size: x-small;
+  }
+  @media(max-width: 400px) and (max-height: 600px) {
+    padding: 20px;
+    font-size: xx-small;
+  }
+}

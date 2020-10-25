@@ -1,0 +1,9 @@
+$primary-color: #104b5d;
+$secondary-color: #5c093e;
+$alert-color: #970110;
+$text-color:  #f78b00;
+$text-light-color: #df6300;
+
+@function getColor($opacity) {
+  @return rgba(6, 29, 36, $opacity)
+}
