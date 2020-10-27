@@ -33,7 +33,8 @@
   position: absolute;
 }
 .stages:after {
-  border-left: calc(100vw - 12px) solid transparent;
+  border-left: calc(100vw - 3vw) solid transparent;
+  border-top-right-radius: 40px;
   left: 0;
 }
 

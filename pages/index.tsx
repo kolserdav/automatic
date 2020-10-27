@@ -1,11 +1,14 @@
 import Head from 'next/head'
+import { useState, useRef } from 'react'
 import classnames from 'classnames'
 import h from '../styles/home/Header.module.scss'
 import n from '../styles/home/Notice.module.scss'
 import s from '../styles/home/Stage.module.scss'
 import p from '../styles/home/Person.module.scss'
 import a from '../styles/home/Adv.module.scss'
-import { SvgIcon } from '@material-ui/core'
+import e from '../styles/home/Enter.module.scss'
+import f from '../styles/home/Footer.module.scss'
+import t from '../styles/home/Task.module.scss'
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 import FaceIcon from '@material-ui/icons/Face'
 import StorageIcon from '@material-ui/icons/Storage'
@@ -13,6 +16,7 @@ import DoneOutLineIcon from '@material-ui/icons/DoneOutline'
 import DevicesOtherIcon from '@material-ui/icons/DevicesOther'
 import ContactSupportIcon from '@material-ui/icons/ContactSupport'
 import DoneIcon from '@material-ui/icons/Done';
+import AttachFileIcon from '@material-ui/icons/AttachFile'
 import { ThemeProvider, createMuiTheme } from '@material-ui/core'
 import MyApp from './_app'
 import { loadGetInitialProps } from 'next/dist/next-server/lib/utils'
@@ -57,12 +61,16 @@ const MyButton = (props) => {
   return <button className={classnames(n.askButton, 'button')}>{props.text}</button>
 };
 
+
 export default function Home(props) {
 
+  const file: any = useRef();
 
   if (typeof window !== 'undefined') {
     window.addEventListener('resize', () => {
+      const html = document.querySelector('html')
       console.log(document.body.clientWidth)
+      console.log('scrollBar', html.offsetWidth)
     }); 
   }
 
@@ -181,7 +189,41 @@ export default function Home(props) {
             </div>
           </div>
         </div>
+        <div className={e.sendNow}>
+          <div className={e.wrapper}>
+            <h1 style={{position: 'relative', top: '20vh'}}>Закажите сегодня</h1>
+          </div>
+        </div>
       </main>
+      <div className={classnames(t.form, 'center', 'column')}>
+        <div className="boldHeader">
+          <h3>Форма заказа</h3>
+        </div>
+        <div className="boldDesc">
+          <p>Пожалуйста опишите проблему, тогда я смогу предложить решение.</p>
+        </div>
+        <label>Ваше имя:</label>
+        <input placeholder="Иван Иванович" className='textField'></input>
+        <label>Ваша почта</label>
+        <input placeholder='example@mail.com' type='email' className='textField'></input>
+        <label>Описание:</label>
+        <textarea placeholder='Нужно автоматизировать процесс. Описание в файле.' className="textarea"></textarea>
+        <div className={classnames('row', 'center', t.addFile)}
+          onClick={() => {
+            file.current.addEventListener('change', () => {
+              console.log(file.current)
+            })
+            file.current.click();
+          }}
+        >
+          <label style={{ cursor: 'pointer' }}>Файл:</label>
+          <AttachFileIcon style={{ fontSize: '40px' }} color="error" />
+          <input ref={file} hidden type="file"></input>
+        </div>
+      </div>
+      <footer className={f.footer}>
+        footer
+      </footer>
     </div>
     </ ThemeProvider>
   )

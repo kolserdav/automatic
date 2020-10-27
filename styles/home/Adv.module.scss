@@ -1,8 +1,10 @@
 @import '../module.scss';
 
 .advantages {
+  max-width: 100%;
   position: relative;
   padding-top: 40px;
+  padding-bottom: 40px;
   background: getColor(0.9);
 }
 
@@ -14,7 +16,7 @@
   position: absolute;
 }
 .advantages:after {
-  border-left: calc(100vw - 12px) solid transparent;
+  border-left: calc(100vw - 3vw) solid transparent;
   left: 0;
   transform: rotate(180deg);
 }
