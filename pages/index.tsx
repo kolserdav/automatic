@@ -1,5 +1,6 @@
 import Head from 'next/head'
-import { useState, useRef } from 'react'
+import Link from 'next/link'
+import React, { useState, useRef, useEffect } from 'react'
 import classnames from 'classnames'
 import h from '../styles/home/Header.module.scss'
 import n from '../styles/home/Notice.module.scss'
@@ -17,9 +18,10 @@ import DevicesOtherIcon from '@material-ui/icons/DevicesOther'
 import ContactSupportIcon from '@material-ui/icons/ContactSupport'
 import DoneIcon from '@material-ui/icons/Done';
 import AttachFileIcon from '@material-ui/icons/AttachFile'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { ThemeProvider, createMuiTheme } from '@material-ui/core'
-import MyApp from './_app'
-import { loadGetInitialProps } from 'next/dist/next-server/lib/utils'
+
+const firstYear = 2020;
 
 const theme = createMuiTheme({
   palette: {
@@ -41,14 +43,19 @@ const theme = createMuiTheme({
 
 const stageIcon = {
   margin: '0 auto 0 auto',
-  fontSize: '80px',
+  fontSize: '4vh',
   marginTop: '40px'
 };
 
 const advIcon = {
-  fontSize: '80px',
-  margin: 'auto 30px auto 12px',
+  fontSize: '4vh',
+  margin: 'auto 0 auto 0',
 };
+
+function toAnchor(selector) {
+  var element = document.querySelector('#' + selector);
+  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
 const sendMail = () => {
   fetch('api/mailer')
@@ -58,14 +65,20 @@ const sendMail = () => {
 }
 
 const MyButton = (props) => {
-  return <button className={classnames(n.askButton, 'button')}>{props.text}</button>
+  return <button title={props.title} onClick={props.onClick} className={classnames(n.askButton, 'button')}>{props.text}</button>
 };
+
 
 
 export default function Home(props) {
 
   const file: any = useRef();
 
+  const [ files, setFiles ] = useState([]);
+
+  useEffect(() => {}, [files]);
+
+  // TODO development mode
   if (typeof window !== 'undefined') {
     window.addEventListener('resize', () => {
       const html = document.querySelector('html')
@@ -74,6 +87,18 @@ export default function Home(props) {
     }); 
   }
 
+  const addFilesHandle = (e) => {
+    const allFiles = e.target.files;
+    for (let i = 0; allFiles[i]; i ++) {
+      if (allFiles[i].size > 3000000) {
+        alert(`Файл ${allFiles[i].name} имеет недопустимый размер!`);
+        continue;
+      } 
+      if (files.indexOf(allFiles[i].name) === -1) files.push(allFiles[i]); 
+    }
+    setFiles([...files]);
+  };
+
   return (
     <ThemeProvider theme={theme}>
     <div className={classnames('container', 'column', 'center')}>
@@ -81,7 +106,7 @@ export default function Home(props) {
         <title>Dev</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <header className={classnames(h.header)}>
+      <header id="header" className={classnames(h.header)}>
         <div className={classnames(h.shadow, 'column', 'center', 'fullScreen')}>
           <div className={classnames(h.headerText, 'centerText')}><h1>Автоматизация процессов обработки данных</h1></div>
           <div className={classnames(h.headerDescription, 'centerText')}>Создание простых и сложных скриптов выполняющих повторяющиеся действия при работе с данными на вашем ПК или веб сервисе</div>
@@ -89,14 +114,16 @@ export default function Home(props) {
       </header>
       <main className={classnames(s.main, 'column', 'start')}>
         <div className={classnames(n.notice, 'column', 'center', 'fullScreen')}>
-          <div className={n.line}></div>
-          <div className={classnames(n.textNotice, 'centerText')}><h1>Хотите сократить время на частых повторяющихся действиях при работе с данными, но не знаете с чего начать?</h1></div>
-          <div className={n.line}></div>
+          <div className={classnames(n.noticeBlock, 'column', 'center')}>
+            <div className={n.line}></div>
+            <div className={classnames(n.textNotice, 'centerText')}><h1>Хотите сократить время на частых повторяющихся действиях при работе с данными, но не знаете с чего начать?</h1></div>
+            <div className={n.line}></div>
+          </div>
           <div className={n.firstButton}>
-            <MyButton text="Консультация" />
+            <MyButton title='Перейти к форме заказа' onClick={() => { toAnchor('task') }} text="Консультация" />
           </div>
         </div>
-        <div className={classnames(s.stages, 'column')}>
+        <div id='stages' className={classnames(s.stages, 'column')}>
           <div className={classnames('column', 'center')}>
             <div className={'boldHeader'}><h4>Как проходит процесс создания скрипта автоматизации?</h4></div>
             <div className={classnames('boldDesc', 'big')}><p><u>Создание компьютерных программ состоит из нескольких этапов:</u></p></div>
@@ -134,11 +161,11 @@ export default function Home(props) {
                 <div className={classnames('boldDesc', 'paddingSmall')}><span>После окончания разработки и тестирования, программа встраивается в то место где она решает свою задачу.</span></div>
               </div>
             </div>
-            <MyButton text="Отправить заявку" />
+            <MyButton title='Перейти к форме заказа' onClick={() => { toAnchor('task') }} text="Отправить заявку" />
           </div>
         </div>
         <div className={p.delimiter}></div>
-        <div className={classnames(p.person, 'center')}>
+        <div id='person' className={classnames(p.person, 'center')}>
           <div className={p.personDesc}>
             <div className={p.personName}><h4>Сергей Кольмиллер</h4></div>
             <div className={p.personSpec}><span><i>Программист</i></span></div>
@@ -154,7 +181,7 @@ export default function Home(props) {
           </div>
           <div className={p.personImage}></div>
         </div>
-        <div className={classnames(a.advantages, 'fullScreen')}>
+        <div id='advantages' className={classnames(a.advantages, 'fullScreen')}>
           <div className={'boldHeader'}>
             <h3>Почему меня выбирают исполнителем?</h3>
           </div>
@@ -191,38 +218,78 @@ export default function Home(props) {
         </div>
         <div className={e.sendNow}>
           <div className={e.wrapper}>
-            <h1 style={{position: 'relative', top: '20vh'}}>Закажите сегодня</h1>
+            <div style={{ fontSize: '4vh', fontWeight: 600, position: 'relative', top: '22vh'}}><b>Закажите сегодня</b></div>
           </div>
         </div>
       </main>
-      <div className={classnames(t.form, 'center', 'column')}>
+      <div id='task' className={classnames(t.form, 'center', 'column')}>
         <div className="boldHeader">
           <h3>Форма заказа</h3>
         </div>
         <div className="boldDesc">
           <p>Пожалуйста опишите проблему, тогда я смогу предложить решение.</p>
         </div>
-        <label>Ваше имя:</label>
+        <label className={t.label}>Ваше имя:</label>
         <input placeholder="Иван Иванович" className='textField'></input>
-        <label>Ваша почта</label>
+        <label className={t.label}>Ваша почта:</label>
         <input placeholder='example@mail.com' type='email' className='textField'></input>
-        <label>Описание:</label>
+        <label className={t.label}>Описание:</label>
         <textarea placeholder='Нужно автоматизировать процесс. Описание в файле.' className="textarea"></textarea>
         <div className={classnames('row', 'center', t.addFile)}
+          title='Добавить файлы'
           onClick={() => {
-            file.current.addEventListener('change', () => {
-              console.log(file.current)
-            })
             file.current.click();
           }}
         >
-          <label style={{ cursor: 'pointer' }}>Файл:</label>
-          <AttachFileIcon style={{ fontSize: '40px' }} color="error" />
-          <input ref={file} hidden type="file"></input>
+          <label style={{ fontSize: '1.6vh', cursor: 'pointer' }}>Файлы:</label>
+          <AttachFileIcon style={{ fontSize: '2vh' }} color="error" />
+          <input onChange={addFilesHandle} 
+            ref={file} 
+            hidden 
+            multiple={true} 
+            type="file"
+            accept="image/jpeg,image/png,image/gif"
+          ></input>
         </div>
+        <div className={classnames(t.files, 'column', 'center')}>{ files.map((f, i) => {
+            return (
+              <li className={classnames(t.liItem, 'row', 'center')} key={i}>{ f.name } <DeleteForeverIcon 
+                style={{ fontSize: '2.5vh',cursor: 'pointer' }}
+                color='error'
+                titleAccess='Удалить файл из списка'
+                onClick={(e) => {
+                  const el: any = e.target;
+                  const li = (el.tagName === 'path')? el.parentElement.parentElement : el.parentElement;
+                  const newFiles = [];
+                  for (let i = 0; files[i]; i ++) {
+                    if (files[i].name !== li.innerText.trim()) newFiles.push(files[i])
+                  }
+                  setFiles([...newFiles]);
+                }} 
+              /> </li>
+            )
+          }) }</div>
+          <div className={t.sendButton}>
+            <MyButton text="Заказать" />
+          </div>
       </div>
       <footer className={f.footer}>
-        footer
+        <div className={classnames(f.links, 'row', 'center')}>
+          <a onClick={() => { toAnchor('header') }} className={f.link}>О сайте</a>
+          <a onClick={() => { toAnchor('stages') }} className={f.link}>Процесс</a>
+          <a onClick={() => { toAnchor('person') }} className={f.link}>Об авторе</a>
+          <a onClick={() => { toAnchor('advantages') }} className={f.link}>Преимущества</a>
+          <a onClick={() => { toAnchor('task') }} className={f.link}>Форма заказа</a>
+        </div>
+        <div className={classnames(f.links, 'column', 'start')}>
+          <Link href='/rules'><a className='nextLink'>Правила использования</a></Link>
+          <Link href='/policy'><a className='nextLink'>Политика конфиденциальности</a></Link>
+          <Link href='/contract'><a className='nextLink'>Договор</a></Link>
+        </div>
+        <div className={f.copyright}>&copy; Все права защищены: {(() => { 
+          const currentYear = new Date().getFullYear();
+          return (firstYear === currentYear)? firstYear : `${firstYear} - ${currentYear}`;
+        })()}</div>
       </footer>
     </div>
     </ ThemeProvider>

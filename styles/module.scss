@@ -3,6 +3,8 @@ $secondary-color: #5c093e;
 $alert-color: #970110;
 $text-color:  #f78b00;
 $text-light-color: #df6300;
+$gray-color: #9ca5a7;
+$black-color: #313a3c;
 
 @function getColor($opacity) {
   @return rgba(6, 29, 36, $opacity)

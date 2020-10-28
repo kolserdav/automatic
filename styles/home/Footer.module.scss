@@ -1,5 +1,44 @@
-
+@import '../module.scss';
 
 .footer {
+  background: $black-color;
   height: 40vh;
+  width: 100%;
+}
+
+.links {
+  margin: 40px;
+}
+
+.link {
+  font-size: 2vh;
+  color: $gray-color;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  cursor: pointer;
+  margin: 20px;
+  text-decoration: underline;
+  @media(max-width: 700px) {
+    font-size: 1.2vh;
+    margin: 10px;
+  }
+  @media(max-width: 400px) {
+    margin: 5px;
+  }
+}
+
+.link:hover {
+  text-decoration: none;
+}
+
+.link:active {
+  color: $alert-color;
+}
+
+.copyright {
+  width: 100%;
+  color: $gray-color;
+  position: absolute;
+  margin: auto 0 20px 0;
+  text-align: center;
+  font-size: 1.5vh;
 }

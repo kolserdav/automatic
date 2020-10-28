@@ -4,6 +4,10 @@
   background: $primary-color;
 }
 
+.noticeBlock {
+  margin-top: 100px;
+}
+
 .line {
   width: 20%;
   height: 4px;
@@ -16,22 +20,36 @@
   margin: 0 20px 0 20px;
   line-height: 3em;
   max-width: 1200px;
-  font-size: large;
+  font-size: 2.5vh;
   color: $text-color;
+  @media(min-width: 3800px) {
+    max-width: 2000px;
+  }
+  @media(max-width: 500px) {
+    margin: 0 10px 0 10px;
+  }
 }
 
 .firstButton {
-  margin: 20vw;
+  margin: 10vw;
 }
 
 .askButton {
-  width: 200px;
-  padding: 12px;
-  margin-top: 20px;
+  min-width: 200px;
+  width: 15vw;
+  height: 5vh;
+  font-size: 2vh;
+  padding: auto;
   color: #fafafa;
   background-color: $secondary-color;
-  font-size: large;
   font-weight: 500;
   border: 2px solid $alert-color;
   border-radius: 3px;
+  @media(max-width: 500px) {
+    border: 1px solid $alert-color;
+    border-radius: 2px;
+  }
+  @media(max-width: 300px) {
+    font-size: medium;
+  }
 }

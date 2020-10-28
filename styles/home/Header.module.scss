@@ -23,10 +23,13 @@
 .headerText {
   margin: 0 5px 0 5px;
   max-width: 1000px;
-  font-size: xx-large;
+  font-size: 4vh; 
   line-height: 3em;
   color: $text-light-color;
   text-shadow: 1px 1px 2px black, 0 0 1em #fff;
+  @media(min-width: 3800px) {
+    max-width: 2000px;
+  }
   @media(max-width: 1000px) {
     font-size: x-large;
   }
@@ -44,7 +47,7 @@
 .headerDescription {
   max-width: 1200px;
   padding: 40px;
-  font-size: large;
+  font-size: 2vh;
   line-height: 2em;
   color: $text-color;
   text-shadow: 1px 1px 2px black, 0 0 1em #fff;

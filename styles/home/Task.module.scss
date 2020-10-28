@@ -12,6 +12,25 @@
   cursor: pointer;
 }
 
+.label {
+  font-size: 1.9vh; 
+  cursor: pointer; 
+}
+
+.liItem {
+  color: $text-color;
+  font-size: 2vh;
+  overflow-x: auto;
+}
+
+.files {
+  margin: 0 20px 20px;
+}
+
+.sendButton {
+  margin: 20px;
+}
+
 .addFile:hover {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }

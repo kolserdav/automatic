@@ -2,6 +2,7 @@
 
 html,
 body {
+  background: $black-color;
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -76,11 +77,17 @@ label {
 .boldHeader {
   margin: 0 20px 20px 20px;
   max-width: 1000px;
-  font-size: xx-large;
+  font-size: 4vh;
   color: $text-light-color;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+  @media(min-width: 3800px) {
+    max-width: 2000px;
+  }
+  @media(max-width: 300px) {
+    font-size: x-large;
+  }
 }
 
 .boldHeader.start {
@@ -92,11 +99,18 @@ label {
   max-width: 500px;
   font-weight: 600;
   padding: 0 40px 40px 40px;
-  font-size: large;
+  font-size: 2vh;
   line-height: 1.5em;
   color: $text-color;
+  @media(min-width: 3800px) {
+    max-width: 1500px;
+  }
   @media(max-width: 700px) {
-    padding: 0 10px 10px 15px;;
+    padding: 0 10px 10px 15px;
+  }
+  @media(max-width: 300px) {
+    padding: 0 5px 5px 10px;
+    font-size: medium;
   }
 }
 
@@ -105,37 +119,67 @@ label {
 }
 
 .textField {
-  font-size: x-large;
+  font-size: 2vh;
   margin: 10px 20px 20px 20px;
   height: 2em;
   width: 500px;
   color: $primary-color;
   border-color: $text-light-color;
+  @media(min-width: 3800px) {
+    width: 15vw;
+  }
   @media(max-width: 500px) {
     width: 300px;
+  }
+  @media(max-width: 300px) {
+    width: 220px;
   }
 }
 
 .textarea {
   width: 500px;
   height: 5em;
-  font-size: large;
+  font-size: 1.8vh;
   margin: 10px 20px 0 20px;
   color: $primary-color;
+  @media(min-width: 3800px) {
+    width: 15vw;
+  }
   @media(max-width: 500px) {
     width: 300px;
+  }
+  @media(max-width: 300px) {
+    width: 220px;
   }
 }
 
 .select {
   margin: 12px;
-  font-size: x-large;
+  font-size: 2vh;
   margin: 10px 20px 20px 20px;
   height: 2em;
   width: 500px;
   color: $primary-color;
   border-color: $text-light-color;
+  @media(min-width: 3800px) {
+    width: 15vw;
+    height: 5em;
+  }
   @media(max-width: 500px) {
     width: 300px;
   }
+  @media(max-width: 300px) {
+    width: 220px;
+  }
+}
+
+.nextLink {
+  color: $gray-color;
+  cursor: pointer;
+  font-size: 1.5vh;
+  margin: 5px;
+}
+
+.nextLink:hover {
+  text-decoration: underline;
 }

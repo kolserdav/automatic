@@ -4,4 +4,7 @@ module.exports = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
+  devIndicators: {
+    autoPrerender: false,
+  }
 }

@@ -24,17 +24,20 @@
 .personDesc {
   max-width: 500px;
   margin: 40px;
+  @media(min-width: 3800px) {
+    max-width: 2000px;
+  }
 }
 
 .personName {
   color: $text-light-color;
-  font-size: x-large;
+  font-size: 1.8vh;
 }
 
 .personSpec {
   color: $text-color;
   margin: 0 auto 60px 0;
-  font-size: medium;
+  font-size: 1.5vh;
   font-weight: 600;
 }
 
@@ -45,13 +48,13 @@
 .personLi {
   font-weight: 600;
   color: $text-light-color;
-  font-size: large;
+  font-size: 1.5vh;
   line-height: 1.5em;
 }
 
 .personText {
   color: $text-color;
-  font-size: large;
+  font-size: 2vh;
   line-height: 1.5em;
   font-weight: 600;
 }
@@ -68,5 +71,8 @@
   background-size: cover;
   @media(max-width: 468px) {
     width: 300px;
+  }
+  @media(max-width: 300px) {
+    width: 250px;
   }
 }
