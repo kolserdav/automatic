@@ -119,7 +119,7 @@ export default async function Task(req, res) {
     createZip = await new Promise(resolve => {
       exec(`zip -r ${devicePath}.zip ${devicePath}`, (error, stdout, stderr) => {
         if (error) {
-          console.log(`<${Date()}>`, 'ERROR_CREATE_ZIP', devicePath);
+          console.log(`<${Date()}>`, 'ERROR_CREATE_ZIP', devicePath, error);
           resolve(error);
         }
         resolve(0)
@@ -148,12 +148,14 @@ export default async function Task(req, res) {
 
   const key = lib.encodeBase64(dateNow.toString());
 
+  const server = (dev)? 'http://localhost:3000' : 'https://automatic.uyem.ru';
+
   const userMessage = {
     from: 'automatic.uyem.ru',
     to: (dev)? '19_pek@mail.ru' : email,
     subject: "Автоматический ответ от сайта",
-    text: `Здравствуйте, ${name}. Ваша почта была указана в качестве контакта на сайте https://automatic.uyem.ru. Если это были Вы, просто проигнорируйте данное сообщение. Но если это были не Вы пожалуйста перейдите по ссылке ниже, чтобы мы больше не присылали Вам своих предложений: https://automatic.uyem.ru/unsubscribe?e=${email}&k=${key}`, 
-    html: `Здравствуйте, ${name}. Ваша почта была указана в качестве контакта на сайте https://automatic.uyem.ru. Если это были Вы, просто проигнорируйте данное сообщение. Но если это были не Вы пожалуйста перейдите по <a href="http://localhost:3000/unsubscribe?e=${email}&k=${key}">ссылке</a>, чтобы мы больше не присылали Вам своих предложений.`
+    text: `Здравствуйте, ${name}. Ваша почта была указана в качестве контакта на сайте https://automatic.uyem.ru. Если это были Вы, просто проигнорируйте данное сообщение. Но если это были не Вы пожалуйста перейдите по ссылке ниже, чтобы мы больше не присылали Вам своих предложений: ${server}/unsubscribe?e=${email}&k=${key}`, 
+    html: `Здравствуйте, ${name}. Ваша почта была указана в качестве контакта на сайте https://automatic.uyem.ru. Если это были Вы, просто проигнорируйте данное сообщение. Но если это были не Вы пожалуйста перейдите по <a href="${server}/unsubscribe?e=${email}&k=${key}">ссылке</a>, чтобы мы больше не присылали Вам своих предложений.`
   };
 
   const uM = transporter.sendMail(userMessage);
