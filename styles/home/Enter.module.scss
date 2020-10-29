@@ -18,13 +18,28 @@
   background-image: url("../../public/img/home/send_now_background.jpg");
   background-repeat: no-repeat;
   background-position: center;
+  -webkit-background-size: cover !important;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
   background-attachment: fixed;
+  position: static;
   @media(max-width: 700px) {
     background-image: url("../../public/img/home/send_now_background_700.jpg");
     background-repeat: no-repeat;
     background-position: center;
+    -webkit-background-size: cover !important;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
     background-attachment: fixed;
+    position: static;
   }
+}
+
+.header { 
+  font-size: 4vh;
+  font-weight: 600;
+  position: relative; 
+  top: 22vh;
 }

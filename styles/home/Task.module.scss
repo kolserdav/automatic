@@ -38,3 +38,9 @@
 .addFile:active {
   border: 2px solid $alert-color;
 }
+
+.span {
+  font-size: 1.6vh;
+  margin: 12px;
+  color: $gray-color;
+}

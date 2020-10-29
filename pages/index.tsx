@@ -22,6 +22,9 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { ThemeProvider, createMuiTheme } from '@material-ui/core'
 
 const firstYear = 2020;
+const maxSize = 5;
+const allSize = 10;
+const maxDesc = 14000;
 
 const theme = createMuiTheme({
   palette: {
@@ -57,13 +60,6 @@ function toAnchor(selector) {
   element.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-const sendMail = () => {
-  fetch('api/mailer')
-    .then(r => r.json())
-    .then(data => console.log(data))
-    .catch(e => console.error(e))
-}
-
 const MyButton = (props) => {
   return <button title={props.title} onClick={props.onClick} className={classnames(n.askButton, 'button')}>{props.text}</button>
 };
@@ -74,25 +70,80 @@ export default function Home(props) {
 
   const file: any = useRef();
 
+  const [ name, setName ] = useState('');
+  const [ email, setEmail ] = useState('');
+  const [ desc, setDesc ] = useState('');
   const [ files, setFiles ] = useState([]);
 
-  useEffect(() => {}, [files]);
 
-  // TODO development mode
-  if (typeof window !== 'undefined') {
-    window.addEventListener('resize', () => {
-      const html = document.querySelector('html')
-      console.log(document.body.clientWidth)
-      console.log('scrollBar', html.offsetWidth)
-    }); 
+  const sendTask = async () => {
+    const deviceId = btoa(JSON.stringify({
+      userAgent: navigator.userAgent,
+      platform: navigator.platform
+    }));
+    const fileReaders = [];
+    for (let i = 0; files[i]; i ++) {
+      const reader = new FileReader();
+      reader.readAsBinaryString(files[i]);
+      await new Promise(resolve => {
+        reader.addEventListener('load', (ev) => {
+          fileReaders.push({
+            name: files[i].name,
+            type: files[i].type,
+            size: files[i].size,
+            buffer: ev.target.result
+          });
+          resolve(0);
+        });
+      });
+    }
+    console.log(fileReaders)
+    fetch('api/task', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        device: deviceId,
+        name: name,
+        email: email,
+        desc: desc,
+        files: fileReaders
+      })
+    })
+      .then(r => r.json())
+      .then(data => console.log(data))
+      .catch(e => console.error(e))
   }
+
+
+  useEffect(() => {
+
+    // TODO development mode
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', () => {
+        const html = document.querySelector('html')
+        console.log(document.body.clientWidth)
+        console.log('scrollBar', html.offsetWidth)
+      }); 
+    }
+  }, [files]);
+
 
   const addFilesHandle = (e) => {
     const allFiles = e.target.files;
+    let newSize = files.map(i => i.size);
+    const fNewSize = newSize.reduce((a, b) => a + b, 0);
+    let nNewSize = 0;
     for (let i = 0; allFiles[i]; i ++) {
-      if (allFiles[i].size > 3000000) {
+      if (allFiles[i].size > maxSize * 1000000) {
         alert(`Файл ${allFiles[i].name} имеет недопустимый размер!`);
         continue;
+      }
+      nNewSize += allFiles[i].size;
+      if (fNewSize + nNewSize > allSize * 1000000) {
+        alert('превышен максимальный размер файлов');
+        break;
       } 
       if (files.indexOf(allFiles[i].name) === -1) files.push(allFiles[i]); 
     }
@@ -218,7 +269,7 @@ export default function Home(props) {
         </div>
         <div className={e.sendNow}>
           <div className={e.wrapper}>
-            <div style={{ fontSize: '4vh', fontWeight: 600, position: 'relative', top: '22vh'}}><b>Закажите сегодня</b></div>
+            <div className={e.header}><b>Закажите сегодня</b></div>
           </div>
         </div>
       </main>
@@ -230,25 +281,26 @@ export default function Home(props) {
           <p>Пожалуйста опишите проблему, тогда я смогу предложить решение.</p>
         </div>
         <label className={t.label}>Ваше имя:</label>
-        <input placeholder="Иван Иванович" className='textField'></input>
+        <input maxLength={64} onChange={(e) => {setName(e.target.value)}} placeholder="Иван Иванович" className='textField'></input>
         <label className={t.label}>Ваша почта:</label>
-        <input placeholder='example@mail.com' type='email' className='textField'></input>
+        <input maxLength={64} onChange={(e) => {setEmail(e.target.value)}} placeholder='example@mail.com' type='email' className='textField'></input>
         <label className={t.label}>Описание:</label>
-        <textarea placeholder='Нужно автоматизировать процесс. Описание в файле.' className="textarea"></textarea>
+        <span className={t.span}>Максимальное количество символов: { maxDesc }</span>
+        <textarea maxLength={maxDesc} onChange={(e) => {setDesc(e.target.value)}} placeholder='Нужно автоматизировать процесс. Описание в файле.' className="textarea"></textarea>
+        <span className={t.span}>Максимольный размер { maxSize }Mб. Максимальный объем { allSize }Mб.</span>
         <div className={classnames('row', 'center', t.addFile)}
           title='Добавить файлы'
           onClick={() => {
             file.current.click();
           }}
         >
-          <label style={{ fontSize: '1.6vh', cursor: 'pointer' }}>Файлы:</label>
+          <label className={t.label} style={{cursor: 'pointer' }}>Файлы:</label>
           <AttachFileIcon style={{ fontSize: '2vh' }} color="error" />
           <input onChange={addFilesHandle} 
             ref={file} 
             hidden 
             multiple={true} 
             type="file"
-            accept="image/jpeg,image/png,image/gif"
           ></input>
         </div>
         <div className={classnames(t.files, 'column', 'center')}>{ files.map((f, i) => {
@@ -270,7 +322,7 @@ export default function Home(props) {
             )
           }) }</div>
           <div className={t.sendButton}>
-            <MyButton text="Заказать" />
+            <MyButton onClick={sendTask} text="Заказать" />
           </div>
       </div>
       <footer className={f.footer}>

@@ -6,5 +6,8 @@ module.exports = {
   },
   devIndicators: {
     autoPrerender: false,
+  },
+  serverRuntimeConfig: {
+    PROJECT_ROOT: __dirname
   }
 }
