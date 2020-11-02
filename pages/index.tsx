@@ -20,12 +20,15 @@ import DoneIcon from '@material-ui/icons/Done';
 import AttachFileIcon from '@material-ui/icons/AttachFile'
 import CloseIcon from '@material-ui/icons/Close'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
-import ReCAPTCHA from 'react-google-recaptcha'
+import { GoogleReCaptchaProvider, GoogleReCaptcha } from 'react-google-recaptcha-v3'
+import { useCookies } from 'react-cookie'
+
 import { 
   ThemeProvider, 
   createMuiTheme,
   Button,
-  Collapse 
+  Collapse,
+  Checkbox 
 } from '@material-ui/core'
 import { 
   Alert,
@@ -130,7 +133,19 @@ const MyAlert = (props: AlertProps) => {
   </Collapse>)
 };
 
+
+export async function getStaticProps() {
+  return {
+    props: {
+      apiKey: process.env.CAPTCHA_SITE
+    }
+  }
+}
+
+
 export default function Home(props) {
+
+  const [cookies, setCookie] = useCookies(['a']);
 
   const file: any = useRef();
   const recaptchaRef: any = useRef();
@@ -149,11 +164,11 @@ export default function Home(props) {
   const [ files, setFiles ] = useState([]);
   const [ alert, setAlert ] = useState(initialAlert); 
   const [ tAHeight, setTAHeight ] = useState(5);
-  const [ buttonDisabled, setButtonDisabled ] = useState(false);
+  const [ buttonDisabled, setButtonDisabled ] = useState(true);
+  const [ checkCaptcha, setChackCaptcha ] = useState(false);
+  const [ showPopup, setShowPopup ] = useState(cookies.a !== 'true');
 
-  const sendTask = async () => {
-    setAlert(initialAlert);
-    setButtonDisabled(true);
+  const sendTask = async (token: string) => {
     const deviceId = btoa(JSON.stringify({
       userAgent: navigator.userAgent,
       platform: navigator.platform
@@ -177,7 +192,8 @@ export default function Home(props) {
     fetch('api/task', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'token': token
       },
       body: JSON.stringify({
         device: deviceId,
@@ -232,12 +248,17 @@ export default function Home(props) {
           handleClose: () => { setAlert(initialAlert) }
         })
       })
-      .catch(e => console.error(e))
+      .catch(e => {
+        setAlert({
+          open: true,
+          result: 'error',
+          message: 'Сервер не доступен или отсутствует соединение с сетью.',
+          handleClose: () => { setAlert(initialAlert) }
+        })
+      })
   }
 
-
   useEffect(() => {
-
     // TODO development mode
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', () => {
@@ -320,7 +341,7 @@ export default function Home(props) {
               <div className={n.line}></div>
             </div>
             <div className={n.firstButton}>
-              <MyButton disabled={buttonDisabled} title='Перейти к форме заказа' onClick={() => { toAnchor('task') }} text="Консультация" />
+              <MyButton disabled={false} title='Перейти к форме заказа' onClick={() => { toAnchor('task') }} text="Консультация" />
             </div>
           </div>
           <div id='stages' className={classnames(s.stages, 'column')}>
@@ -361,7 +382,7 @@ export default function Home(props) {
                   <div className={classnames('boldDesc', 'paddingSmall')}><span>После окончания разработки и тестирования, программа встраивается в то место где она решает свою задачу.</span></div>
                 </div>
               </div>
-              <MyButton disabled={buttonDisabled} title='Перейти к форме заказа' onClick={() => { toAnchor('task') }} text="Отправить заявку" />
+              <MyButton disabled={false} title='Перейти к форме заказа' onClick={() => { toAnchor('task') }} text="Отправить заявку" />
             </div>
           </div>
           <div className={p.delimiter}></div>
@@ -487,20 +508,43 @@ export default function Home(props) {
                 /> </li>
               )
             }) }</div>
-            <form onSubmit={onSubmit} >
-              <ReCAPTCHA
-                ref={recaptchaRef}
-                sitekey="6LcyON4ZAAAAAMmm_a6rOc4ubsvbFC40hdoIPgdb"
-                onChange={captchaChange}
+            <div className={classnames('row', 'center', 'text')}>
+              <input 
+                className='checkbox'
+                type="checkbox"
+                onChange={ (e) => {
+                  setButtonDisabled(!e.target.checked);
+                } }
               />
-            </form>
+              <p>Ознакомился и принимаю <Link href="/rules"><a target='_blank' className='textLink'>пользовательское соглашение</a></Link> и <Link href="/policy"><a target='_blank' className='textLink'>политику конфиденциальности</a></Link></p>
+            </div>
             <div className={t.sendButton}>
-              <MyButton title="Отправить заявку" disabled={buttonDisabled} onClick={sendTask} text="Заказать" />
+              <MyButton title="Отправить заявку" disabled={buttonDisabled} onClick={() => {
+                setAlert(initialAlert);
+                setButtonDisabled(true);
+                setChackCaptcha(true);
+              }} text="Заказать" />
+              {checkCaptcha? <GoogleReCaptchaProvider reCaptchaKey={props.apiKey}>
+                <GoogleReCaptcha onVerify={(token) => {
+                  sendTask(token);
+                  setChackCaptcha(false);
+                }} />
+              </GoogleReCaptchaProvider> : ''}
             </div>
             <div className='alert'>
               <MyAlert message={alert.message} handleClose={alert.handleClose} result={alert.result} open={alert.open} button={alert.button} />
             </div>
         </div>
+        {showPopup? <div className={classnames('popup', 'row', 'center')}>
+            <p>Сайт использует файлы cookies. Пожалуйста ознакомьтесь с <Link href="/policy"><a className='textLink'>Политикой конфиденциальности</a></Link></p>
+            <button
+              className="yellowButton"
+              onClick={() => {
+                setCookie('a', true, { path: '/' });
+                setShowPopup(false);
+              }}
+            >Хорошо</button>
+          </div> : ''}
         <footer className={f.footer}>
           <div className={classnames(f.links, 'row', 'center')}>
             <a onClick={() => { toAnchor('header') }} className={f.link}>О сайте</a>
@@ -512,7 +556,6 @@ export default function Home(props) {
           <div className={classnames(f.links, 'column', 'start')}>
             <Link href='/rules'><a className='nextLink'>Правила использования</a></Link>
             <Link href='/policy'><a className='nextLink'>Политика конфиденциальности</a></Link>
-            <Link href='/contract'><a className='nextLink'>Договор</a></Link>
           </div>
           <div className={f.copyright}>&copy; Все права защищены: {(() => { 
             const currentYear = new Date().getFullYear();

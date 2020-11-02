@@ -27,15 +27,46 @@ process.on('uncaughtException', (e) => {
 
 const dev = process.env.NODE_ENV === 'development';
 const { serverRuntimeConfig } = getConfig();
-const { PROJECT_ROOT, KEY_DAYS } = serverRuntimeConfig;
+const { PROJECT_ROOT, KEY_DAYS, CAPTCHA_SECRET } = serverRuntimeConfig;
 
 const filesPath = path.resolve(PROJECT_ROOT, 'files');
-const resPath = path.resolve(PROJECT_ROOT, 'resources');
 const db = new sqlite3.Database(path.resolve(PROJECT_ROOT, './database/data.db'));
 
 export default async function Task(req: express.Request, res: express.Response) {
 
   const { name, email, desc, files, device } = req.body;
+
+  const { token } = req.headers;
+
+  const checkRecaptcha: any = await new Promise(resolve => {
+    fetch('https://www.google.com/recaptcha/api/siteverify', { 
+    method: 'post', 
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `secret=${CAPTCHA_SECRET}&response=${token}` 
+  })
+    .then(res => res.json())
+    .then(json => resolve(json))
+    .catch(e => {
+      console.warn(`<${Date()}>`, 'ERROR_CHECK_CAPTCHA', e);
+      resolve(1);
+    });
+  });
+  
+  if (checkRecaptcha === 1) {
+    return res.status(502).json({
+      result: 'error',
+      message: 'Ошибка проверки капчи',
+      body: {}
+    });
+  }
+
+  if (!checkRecaptcha.success) {
+    return res.status(403).json({
+      result: 'warning',
+      message: 'Неверный код капчи',
+      body: {}
+    });
+  }
 
   const errorRes = {
     result: 'error',
