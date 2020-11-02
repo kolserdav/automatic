@@ -1,13 +1,12 @@
-import fs from 'fs'
+import fs, { read } from 'fs'
 import path from 'path'
 import getConfig from 'next/config'
 import { exec } from 'child_process'
 import nodemailer from "nodemailer"
 import * as lib from './lib'
-import Cors from 'cors'
-
-// TODO 
-const cors = Cors({allowedHeaders: 'das'});
+import * as orm from './orm'
+import express from 'express'
+import sqlite3 from 'sqlite3'
 
 export const config = {
   api: {
@@ -17,38 +16,137 @@ export const config = {
   }
 }
 
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      console.log(result)
-      if (!req.headers.ip) {
-        return reject(result)
-      }
-
-      return resolve(result)
-    })
-  })
-}
 
 process.on('unhandledRejection', (e) => {
-  console.error(`<${Date()}>`, 'UNHANDLED_REJECTION', e);
+  console.error(`<${Date()}>`, 'UNHANDLED_REJECTION_TASK', e);
 });
 
 process.on('uncaughtException', (e) => {
-  console.error(`<${Date()}>`, 'UNCAUGT_EXCEPTION', e);
+  console.error(`<${Date()}>`, 'UNCAUGT_EXCEPTION_TASK', e);
 })
 
 const dev = process.env.NODE_ENV === 'development';
-
 const { serverRuntimeConfig } = getConfig();
-const filesPath = path.resolve(serverRuntimeConfig.PROJECT_ROOT, 'files');
+const { PROJECT_ROOT, KEY_DAYS } = serverRuntimeConfig;
 
-export default async function Task(req, res) {
+const filesPath = path.resolve(PROJECT_ROOT, 'files');
+const resPath = path.resolve(PROJECT_ROOT, 'resources');
+const db = new sqlite3.Database(path.resolve(PROJECT_ROOT, './database/data.db'));
 
-  //await runMiddleware(req, res, cors);
+export default async function Task(req: express.Request, res: express.Response) {
 
   const { name, email, desc, files, device } = req.body;
-  let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+  const errorRes = {
+    result: 'error',
+    message: 'Ошибка сервера. Попробуйте ещё раз через несколько минут.',
+    body: {}
+  };
+
+  if (!device || !Array.isArray(files)) {
+    return res.status(400).json({
+      result: 'error',
+      message: 'Неполный запрос',
+      body: {}
+    });
+  }
+
+  if (!name) {
+    return res.status(400).json({
+      result: 'warning',
+      message: 'Имя не указано',
+      body: {}   
+    });
+  }
+
+  if (!email) {
+    return res.status(400).json({
+      result: 'warning',
+      message: 'Почта не указана',
+      body: {}   
+    });
+  }
+
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!re.test(String(email).toLowerCase())) {
+    return res.status(400).json({
+      result: 'warning',
+      message: 'Почта имеет неверный формат',
+      body: {}   
+    }); 
+  }
+
+  const deletedRes: orm.DeletedEmails[] = await orm.getEmailIsDeleted(email);
+
+  if (deletedRes.length !== 0) {
+    if (deletedRes[0].error === 1) {
+      return res.status(500).json(errorRes);
+    }
+    return res.status(403).json({
+      result: 'warning',
+      message: `Данная почта (${email}) была добавлена в стоп лист. Вы не сможете использовать её в качестве контакта на этом сайте.`,
+      body: {
+        stdError: 'Дата добавления в стоп лист:',
+        dataError: [deletedRes[0].date]
+      }
+    });
+  }
+
+  if (!desc) {
+    return res.status(400).json({
+      result: 'warning',
+      message: 'Описание не может быть пустым',
+      body: {}   
+    });
+  }
+
+  const dateNow = Date.now();
+  const key = lib.encodeBase64(dateNow.toString());
+
+  const getRes: any = await orm.getKeyByEmail(email);
+
+  if (getRes === 1) {
+    return res.status(500).json(errorRes);
+  }
+  
+  let updateRes: any;
+
+  if (getRes.length !== 0) {
+    updateRes = await new Promise(resolve => {
+      db.serialize(function() {
+        db.all(`UPDATE keys SET timestamp='${dateNow}' WHERE email='${email}'`, (err: Error, row: any) => {
+          if (err) {
+            console.error(`<${Date()}>`, 'ERROR_UPDATE_TIMESTAMP', err);
+            resolve(1);
+          }
+          else {
+            resolve(row)
+          }
+        });
+      });
+    });
+  }
+  else {
+    updateRes = await new Promise(resolve => {
+      db.serialize(function() {
+        const stmt = db.prepare("INSERT INTO keys (email, key, timestamp) VALUES (?, ?, ?)", (err: Error, row: orm.Keys[]) => {
+          if (err) {
+            console.error(`<${Date()}>`, 'ERROR_INSERT_KEYS', err);
+            resolve(1);
+          }
+          else {
+            resolve(row);
+          }
+        });
+        stmt.run(email, key, dateNow);
+      });
+    });
+  }
+  if (updateRes === 1) {
+    return res.status(500).json(errorRes);
+  }
+
+  let ip: any = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   
   if (ip) {
     if (ip.substr(0, 7) == "::ffff:") {
@@ -77,8 +175,7 @@ export default async function Task(req, res) {
     catch(e) {
       error = 1;
       if (e.message.match(/^EEXIST/)) {
-        errMess = 'Ваш предыдущий запрос ещё не обработан. Попробуйте через 1 минуту.';
-        status = 403;
+        error = 0;
       }
       else {
         status = 500;
@@ -93,7 +190,7 @@ export default async function Task(req, res) {
   });
 
   if (createDir.error === 1) {
-    return await res.status(createDir.status).json({
+    return res.status(createDir.status).json({
       result: 'error',
       message: createDir.errMess,
       body: {}
@@ -144,18 +241,14 @@ export default async function Task(req, res) {
     },
   });
 
-  const dateNow = Date.now();
-
-  const key = lib.encodeBase64(dateNow.toString());
-
   const server = (dev)? 'http://localhost:3000' : 'https://automatic.uyem.ru';
 
   const userMessage = {
     from: 'automatic.uyem.ru',
     to: (dev)? '19_pek@mail.ru' : email,
-    subject: "Автоматический ответ от сайта",
-    text: `Здравствуйте, ${name}. Ваша почта была указана в качестве контакта на сайте https://automatic.uyem.ru. Если это были Вы, просто проигнорируйте данное сообщение. Но если это были не Вы пожалуйста перейдите по ссылке ниже, чтобы мы больше не присылали Вам своих предложений: ${server}/unsubscribe?e=${email}&k=${key}`, 
-    html: `Здравствуйте, ${name}. Ваша почта была указана в качестве контакта на сайте https://automatic.uyem.ru. Если это были Вы, просто проигнорируйте данное сообщение. Но если это были не Вы пожалуйста перейдите по <a href="${server}/unsubscribe?e=${email}&k=${key}">ссылке</a>, чтобы мы больше не присылали Вам своих предложений.`
+    subject: "Автоматический ответ c сайта",
+    text: `Здравствуйте, ${name}. Ваша почта была указана в качестве контакта на сайте https://automatic.uyem.ru. Если это были Вы, просто проигнорируйте данное сообщение. Но если это были не Вы пожалуйста перейдите по ссылке ниже, чтобы мы больше не присылали Вам своих предложений: ${server}/unsubscribe?e=${email}&k=${key} .Ссылка действительна в течении ${KEY_DAYS} дней.`, 
+    html: `Здравствуйте, ${name}. Ваша почта была указана в качестве контакта на сайте https://automatic.uyem.ru. Если это были Вы, просто проигнорируйте данное сообщение. Но если это были не Вы пожалуйста перейдите по <a href="${server}/unsubscribe?e=${email}&k=${key}">ссылке</a>, чтобы мы больше не присылали Вам своих предложений. <i>Ссылка действительна в течении ${KEY_DAYS} дней.</i>`
   };
 
   const uM = transporter.sendMail(userMessage);
@@ -190,6 +283,18 @@ export default async function Task(req, res) {
           <td>${email}</td>
         </tr>
         <tr>
+          <td><b>IP:</b></td>
+          <td>${ip}</td>
+        </tr>
+        <tr>
+          <td><b>Заголовки:</b></td>
+          <td>${JSON.stringify(req.headers)}</td>
+        </tr>
+        <tr>
+          <td><b>Данные с устройства:</b></td>
+          <td>${rawDevice}</td>
+        </tr>
+        <tr>
           <td><b>ИД:</b></td>
           <td>${deviceId}</td>
         </tr>
@@ -216,11 +321,13 @@ export default async function Task(req, res) {
     transporter.sendMail(adminMessage)
       .then(result => {
         setTimeout(() => {
-          fs.rmdir(`${devicePath}`, { recursive: true }, (e) => { if (e !== null) console.error(`<${Date()}>`, 'ERROR_RMDIR_DEVICE', deviceId, e) });
-          if (files.length > 0) {
-            fs.unlink(`${devicePath}.zip`, (e) => { if (e !== null) console.error(`<${Date()}>`, 'ERROR_UNLINK_ZIP', deviceId, e) });
+          if (createZip === 0) {
+            fs.rmdir(`${devicePath}`, { recursive: true }, (e) => { if (e !== null) console.error(`<${Date()}>`, 'ERROR_RMDIR_DEVICE', deviceId, e) });
+            if (files.length > 0) {
+              fs.unlink(`${devicePath}.zip`, (e) => { if (e !== null) console.error(`<${Date()}>`, 'ERROR_UNLINK_ZIP', deviceId, e) });
+            }
           }
-        }, 60 * 1000)
+        }, 6 * 1000)
       })
       .catch(e => {
         console.error(`<${Date()}>`, 'ERROR_SEND_ADMIN_EMAIL', adminMessage, e);
@@ -230,18 +337,18 @@ export default async function Task(req, res) {
 
   if (errorFiles.length > 0) {
     return await res.status(400).json({
-      result: 'warning',
-      message: 'Заявка добавлена с предупреждением',
+      result: 'success',
+      message: 'Заявка добавлена с предупреждением.',
       body: {
         stdError: stdError,
-        errorFiles: errorFiles
+        dataError: errorFiles
       }
     })
   }
 
   return await res.status(201).json({
     result: 'success',
-    message: 'Заявка успешно отправлена!',
+    message: 'Заявка отправлена.',
     body: {
 
     }

@@ -24,7 +24,11 @@
 }
 
 .files {
+  position: relative;
+  margin: 5px;
+  width: 100%;
   margin: 0 20px 20px;
+  overflow-x: auto;
 }
 
 .sendButton {

@@ -53,3 +53,7 @@
     font-size: medium;
   }
 }
+
+.askButton.disabled {
+  background-color: $gray-color;
+}

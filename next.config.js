@@ -8,6 +8,8 @@ module.exports = {
     autoPrerender: false,
   },
   serverRuntimeConfig: {
-    PROJECT_ROOT: __dirname
+    PROJECT_ROOT: __dirname,
+    KEY_DAYS: 3,
+    CAPTCHA_SECRET: '6LcyON4ZAAAAAOswuVGu5V_bhDkIfYrUQLtJIk-Z'
   }
 }
