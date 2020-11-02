@@ -1,14 +1,15 @@
 {
   "name": "automatic",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "NODE_ENV=production next build",
     "start": "NODE_ENV=production next start",
     "createtables": "node scripts/createTables.js",
-    "prod": "screen -dmS node -L yarn start",
-    "deploy": "yarn createtables && yarn build && yarn prod"
+    "prod": "echo ~/.screenrc > logfile /home/spec/logs/out-1.0.0.log && screen -dmS node -L yarn start",
+    "deploy": "yarn createtables && yarn build && yarn prod",
+    "logs": "cat ~/logs/out-${npm_package_version}.log"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",

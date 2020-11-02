@@ -179,6 +179,8 @@ export default async function Task(req: express.Request, res: express.Response) 
 
   let ip: any = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   
+  console.log(req.headers['x-forwarded-for'], req.connection.remoteAddress)
+
   if (ip) {
     if (ip.substr(0, 7) == "::ffff:") {
       ip = ip.substr(7)
