@@ -7,7 +7,8 @@
     "build": "NODE_ENV=production next build",
     "start": "NODE_ENV=production next start",
     "createtables": "node scripts/createTables.js",
-    "deploy": "yarn createtables && yarn build && screen -dmS node -L  -Logfile logs/out-${npm_package_version}.log yarn start"
+    "prod": "screen -dmS node -L yarn start",
+    "deploy": "yarn createtables && yarn build && yarn prod"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
