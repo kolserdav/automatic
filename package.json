@@ -7,7 +7,7 @@
     "build": "NODE_ENV=production next build",
     "start": "NODE_ENV=production next start",
     "createtables": "node scripts/createTables.js",
-    "prod": "echo ~/.screenrc > logfile /home/spec/logs/out-${npm_package_version}.log && screen -dmS node -L yarn start",
+    "prod": "echo logfile /home/spec/logs/out-${npm_package_version}.log > ~/.screenrc && screen -dmS node -L yarn start",
     "deploy": "yarn createtables && yarn build && yarn prod",
     "logs": "cat ~/logs/out-${npm_package_version}.log"
   },
