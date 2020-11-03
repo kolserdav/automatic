@@ -260,13 +260,13 @@ export default function Home(props) {
 
   useEffect(() => {
     // TODO development mode
-    if (typeof window !== 'undefined') {
+    /*if (typeof window !== 'undefined') {
       window.addEventListener('resize', () => {
         const html = document.querySelector('html')
         console.log(document.body.clientWidth)
         console.log('scrollBar', html.offsetWidth)
       }); 
-    }
+    }*/
   }, [files, buttonDisabled]);
 
   const addFilesHandle = (e) => {
@@ -320,11 +320,28 @@ export default function Home(props) {
     console.log(recaptchaValue)
   };
 
+  const title = 'Автоматизация процессов обработки данных';
+  const description = 'Создание простых и сложных скриптов выполняющих повторяющиеся действия при работе с данными на вашем ПК или веб сервисе';
+
   return (
     <ThemeProvider theme={theme}>
       <div className={classnames('container', 'column', 'center')}>
         <Head>
-          <title>Dev</title>
+          <title>{ title }</title>
+          <meta name="robots" content="index,follow"></meta>
+          <meta name="description" content={ description } />
+          <meta name="keywords" content="автоматизация, автоматизация процессов, системы автоматизации, средства автоматизации, автоматизация работы, автоматизация технологических процессов, автоматизация предприятия, автоматизация деятельности, использование средств автоматизации, автоматизация систем управления, автоматизация производственных, автоматизация данных, автоматизация бизнеса, автоматизация учета, автоматизация информационных, автоматизация обработки, автоматизация обработки данных, программная автоматизация, автоматизация информационных систем" />
+          <meta property="og:url" content="https://automatic.uyem.ru"/>
+          <meta property="og:type" content="article" />
+          <meta property="og:title" content={ title } />
+          <meta property="og:description" content={ description } />
+          <meta property="og:site_name" content="Automaticuyem" />
+          <meta property="og:image" content="https://automatic.uyem.ru/img/home/header_background_700.jpg" />
+          <meta property="article:published_time" content="2020-11-3T13:16:59+01:00" />
+          <meta property="article:author" content="Сергей Кольмиллер" />
+          <meta name="google-site-verification" content="GOOGLEWM" />
+          <meta name="yandex-verification" content="YANDEXWM" />
+          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <header id="header" className={classnames(h.header)}>
@@ -540,7 +557,7 @@ export default function Home(props) {
             <button
               className="yellowButton"
               onClick={() => {
-                setCookie('a', true, { path: '/' });
+                setCookie('a', true, { path: '/', maxAge: 3 * 30 * 24 * 3600 });
                 setShowPopup(false);
               }}
             >Хорошо</button>

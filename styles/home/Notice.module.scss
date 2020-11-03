@@ -54,6 +54,20 @@
   }
 }
 
+.askButton:hover {
+  box-shadow: 0 0 10px rgba(87,38,0,1.0);
+}
+
+.askButton:active {
+  background-color: $alert-color;
+}
+
 .askButton.disabled {
+  cursor: not-allowed;
   background-color: $gray-color;
 }
+
+.askButton.disabled:hover {
+  border: 2px solid $black-color;
+}
+

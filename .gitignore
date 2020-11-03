@@ -37,4 +37,5 @@ yarn-error.log*
 files/*
 database/*
 logs/*
+tmp/
 

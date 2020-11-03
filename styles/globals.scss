@@ -66,17 +66,6 @@ label {
   z-index: 12;
 }
 
-.button.disabled {
-  cursor: not-allowed;
-}
-
-.button:hover {
-  box-shadow: 0 0 10px rgba(87,38,0,1.0);
-}
-
-.button:active {
-  background-color: $alert-color;
-}
 
 .boldHeader {
   margin: 0 20px 20px 20px;
