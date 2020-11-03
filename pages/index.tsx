@@ -296,7 +296,6 @@ export default function Home(props) {
         continue;
       }
       nNewSize += allFiles[i].size;
-      console.log(nNewSize, fNewSize)
       if (fNewSize + nNewSize > allSize * 1000000) {
         err = true;
         setAlert({
@@ -320,15 +319,6 @@ export default function Home(props) {
     setFiles([...files]);
   };
   
-  const captchaChange = (e) => {
-    console.log(e)
-  };
-
-  const onSubmit = (e) => {
-    const recaptchaValue = recaptchaRef.current.getValue();
-    console.log(recaptchaValue)
-  };
-
   const title = 'Автоматизация процессов обработки данных';
   const description = 'Создание простых и сложных скриптов выполняющих повторяющиеся действия при работе с данными на вашем ПК или веб сервисе';
 
@@ -539,6 +529,7 @@ export default function Home(props) {
             }) }</div>
             <div className={classnames('row', 'center', 'text')}>
               <input 
+                disabled={progress}
                 ref={checkbox}
                 className='checkbox'
                 type="checkbox"
