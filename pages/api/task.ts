@@ -177,15 +177,7 @@ export default async function Task(req: express.Request, res: express.Response) 
     return res.status(500).json(errorRes);
   }
 
-  let ip: any = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  
-  console.log(email, req.headers['x-forwarded-for'], req.connection.remoteAddress);
-
-  if (ip) {
-    if (ip.substr(0, 7) == "::ffff:") {
-      ip = ip.substr(7)
-    }
-  }
+  let ip: any = req.headers['x-forwarded-for'];
   
   let rawDevice = JSON.parse(Buffer.from(device, 'base64').toString());
   rawDevice.ip = ip;
@@ -197,7 +189,7 @@ export default async function Task(req: express.Request, res: express.Response) 
   const errorFiles = [];
   let createZip = null;
 
-  const devicePath = `${filesPath}/${deviceId}`;
+  const devicePath = `${filesPath}/${key}`;
   const createDir: any = await new Promise(resolve => {
     let status = 201;
     let error = 0;
@@ -212,7 +204,7 @@ export default async function Task(req: express.Request, res: express.Response) 
       }
       else {
         status = 500;
-        console.log(`<${Date()}>`, 'ERROR_CREATE_DIR', rawDevice, deviceId, e);
+        console.log(`<${Date()}>`, 'ERROR_CREATE_DIR', rawDevice, key, e);
       }
     }
     resolve({
@@ -234,7 +226,7 @@ export default async function Task(req: express.Request, res: express.Response) 
       const writeFile = await new Promise(resolve => {
         fs.writeFile(`${devicePath}/${files[i].name}`, files[i].buffer, 'binary', (err) => {
           if (err) {
-            console.log(`<${Date()}>`, 'ERROR_WRITE_FILE', files[i].name, rawDevice, deviceId, err);
+            console.log(`<${Date()}>`, 'ERROR_WRITE_FILE', files[i].name, rawDevice, key, err);
             errorFiles.push(files[i].name);
             resolve(errorFiles);
           }
@@ -257,7 +249,7 @@ export default async function Task(req: express.Request, res: express.Response) 
     });
     if (createZip === 0) {
       attachments = [{
-        filename: `${deviceId}.zip`,
+        filename: `${key}.zip`,
         path: `${devicePath}.zip`
       }]
     }

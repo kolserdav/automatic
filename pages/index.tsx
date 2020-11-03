@@ -22,14 +22,13 @@ import CloseIcon from '@material-ui/icons/Close'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { GoogleReCaptchaProvider, GoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useCookies } from 'react-cookie'
-import { YMInitializer } from 'react-yandex-metrika';
 
 import { 
   ThemeProvider, 
   createMuiTheme,
   Button,
   Collapse,
-  Checkbox 
+  LinearProgress
 } from '@material-ui/core'
 import { 
   Alert,
@@ -149,6 +148,7 @@ export default function Home(props) {
   const [cookies, setCookie] = useCookies(['a']);
 
   const file: any = useRef();
+  const checkbox: any = useRef();
   const recaptchaRef: any = useRef();
 
   const initialAlert: AlertProps = {
@@ -167,7 +167,8 @@ export default function Home(props) {
   const [ tAHeight, setTAHeight ] = useState(5);
   const [ buttonDisabled, setButtonDisabled ] = useState(true);
   const [ checkCaptcha, setChackCaptcha ] = useState(false);
-  const [ showPopup, setShowPopup ] = useState(cookies.a !== 'true');
+  const [ showPopup, setShowPopup ] = useState(false);
+  const [ progress, setProgress ] = useState(false);
 
   const sendTask = async (token: string) => {
     const deviceId = btoa(JSON.stringify({
@@ -206,14 +207,18 @@ export default function Home(props) {
     })
       .then(r => r.json())
       .then(data => {
+        setProgress(false);
         if (data.result === 'success') {
+          checkbox.current.checked = false;
           setName('');
           setEmail('');
           setDesc('');
           setFiles([]);
           setTAHeight(5);
         }
-        setButtonDisabled(false);
+        else {
+          setButtonDisabled(false);
+        }
         let button = null;
         if (data.body.stdError) {
           let dataButton = null;
@@ -250,6 +255,7 @@ export default function Home(props) {
         })
       })
       .catch(e => {
+        setProgress(false);
         setAlert({
           open: true,
           result: 'error',
@@ -260,6 +266,7 @@ export default function Home(props) {
   }
 
   useEffect(() => {
+    setShowPopup(cookies.a !== 'true');
     // TODO development mode
     /*if (typeof window !== 'undefined') {
       window.addEventListener('resize', () => {
@@ -326,6 +333,9 @@ export default function Home(props) {
 
   return (
     <ThemeProvider theme={theme}>
+      {progress? <div className='progress'>
+        <LinearProgress color="primary" />
+      </div> : ''}
       <div className={classnames('container', 'column', 'center')}>
         <Head>
           <title>{ title }</title>
@@ -337,7 +347,7 @@ export default function Home(props) {
           <meta property="og:title" content={ title } />
           <meta property="og:description" content={ description } />
           <meta property="og:site_name" content="Automaticuyem" />
-          <meta property="og:image" content="https://automatic.uyem.ru/img/home/header_background_700.jpg" />
+          <meta property="og:image" content="https://automatic.uyem.ru/img/home/header_background_700.webp" />
           <meta property="article:published_time" content="2020-11-3T13:16:59+01:00" />
           <meta property="article:author" content="Сергей Кольмиллер" />
           <meta name="google-site-verification" content="GOOGLEWM" />
@@ -528,6 +538,7 @@ export default function Home(props) {
             }) }</div>
             <div className={classnames('row', 'center', 'text')}>
               <input 
+                ref={checkbox}
                 className='checkbox'
                 type="checkbox"
                 onChange={ (e) => {
@@ -538,12 +549,28 @@ export default function Home(props) {
             </div>
             <div className={t.sendButton}>
               <MyButton title="Отправить заявку" disabled={buttonDisabled} onClick={() => {
-                setAlert(initialAlert);
-                setButtonDisabled(true);
+                setAlert({
+                  open: true,
+                  message: 'Антиспам проверка...',
+                  button: null,
+                  result: 'info',
+                  handleClose: () => { setAlert(initialAlert) }
+                });
+                setTimeout(() => {
+                  setButtonDisabled(true);
+                  setProgress(true);
+                }, 250)
                 setChackCaptcha(true);
               }} text="Заказать" />
               {checkCaptcha? <GoogleReCaptchaProvider reCaptchaKey={props.apiKey}>
                 <GoogleReCaptcha onVerify={(token) => {
+                  setAlert({
+                    open: true,
+                    message: 'Отправка данных на сервер...',
+                    button: null,
+                    result: 'info',
+                    handleClose: () => { setAlert(initialAlert) }
+                  });
                   sendTask(token);
                   setChackCaptcha(false);
                 }} />
@@ -575,7 +602,6 @@ export default function Home(props) {
             <Link href='/rules'><a className='nextLink'>Правила использования</a></Link>
             <Link href='/policy'><a className='nextLink'>Политика конфиденциальности</a></Link>
           </div>
-          <YMInitializer accounts={[68978650]} />
           <div className={f.copyright}>&copy; Все права защищены: {(() => { 
             const currentYear = new Date().getFullYear();
             return (firstYear === currentYear)? firstYear : `${firstYear} - ${currentYear}`;
