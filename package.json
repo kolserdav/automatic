@@ -13,8 +13,8 @@
     "get": "screen -x node",
     "deletedemails": "node scripts/getDeletedEmails.js",
     "keys": "node scripts/getKeys.js",
-    "access": "sudo cat /var/log/nginx/access.log",
-    "error": "sudo cat /var/log/nginx/error.log"
+    "accesslog": "sudo cat /var/log/nginx/access.log",
+    "errorlog": "sudo cat /var/log/nginx/error.log"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
