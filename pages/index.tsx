@@ -22,6 +22,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { GoogleReCaptchaProvider, GoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useCookies } from 'react-cookie'
+import { YMInitializer } from 'react-yandex-metrika';
 
 import { 
   ThemeProvider, 
@@ -574,6 +575,7 @@ export default function Home(props) {
             <Link href='/rules'><a className='nextLink'>Правила использования</a></Link>
             <Link href='/policy'><a className='nextLink'>Политика конфиденциальности</a></Link>
           </div>
+          <YMInitializer accounts={[68978650]} />
           <div className={f.copyright}>&copy; Все права защищены: {(() => { 
             const currentYear = new Date().getFullYear();
             return (firstYear === currentYear)? firstYear : `${firstYear} - ${currentYear}`;
