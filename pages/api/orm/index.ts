@@ -63,3 +63,21 @@ export function getEmailIsDeleted(email: string): Promise<DeletedEmails[]> {
     });
   });
 }
+
+export function getDeletedEmails(): Promise<DeletedEmails[]> {
+  return new Promise(resolve => {
+    db.serialize(function() {
+      db.all(`SELECT * FROM deleted_emails`, function(err: Error, row: DeletedEmails[]) {
+        if (err) {
+          console.error(`<${Date()}>`, 'ERROR_GET_DELETED_EMAILS', err);
+          resolve([{
+            error: 1
+          }]);
+        }
+        else {
+          resolve(row);
+        }
+      });
+    });
+  });
+}
