@@ -549,18 +549,52 @@ export default function Home(props) {
             </div>
             <div className={t.sendButton}>
               <MyButton title="Отправить заявку" disabled={buttonDisabled} onClick={() => {
-                setAlert({
-                  open: true,
-                  message: 'Антиспам проверка...',
-                  button: null,
-                  result: 'info',
-                  handleClose: () => { setAlert(initialAlert) }
-                });
-                setTimeout(() => {
-                  setButtonDisabled(true);
-                  setProgress(true);
-                }, 250)
-                setChackCaptcha(true);
+                if (!name) {
+                  setAlert({
+                    result: 'warning',
+                    message: `Имя не указано`,
+                    open: true,
+                    handleClose: () => { setAlert(initialAlert) }
+                  });
+                }
+                else if (!email) {
+                  setAlert({
+                    result: 'warning',
+                    message: `Почта не указана`,
+                    open: true,
+                    handleClose: () => { setAlert(initialAlert) }
+                  });
+                }
+                else if (!email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+                  setAlert({
+                    result: 'warning',
+                    message: `Почта имеет неверный формат`,
+                    open: true,
+                    handleClose: () => { setAlert(initialAlert) }
+                  });
+                }
+                else if (!desc) {
+                  setAlert({
+                    result: 'warning',
+                    message: `Описание не может быть пустым`,
+                    open: true,
+                    handleClose: () => { setAlert(initialAlert) }
+                  });
+                }
+                else {
+                  setAlert({
+                    open: true,
+                    message: 'Антиспам проверка...',
+                    button: null,
+                    result: 'info',
+                    handleClose: () => { setAlert(initialAlert) }
+                  });
+                  setTimeout(() => {
+                    setButtonDisabled(true);
+                    setProgress(true);
+                  }, 250)
+                  setChackCaptcha(true);
+                }
               }} text="Заказать" />
               {checkCaptcha? <GoogleReCaptchaProvider reCaptchaKey={props.apiKey}>
                 <GoogleReCaptcha onVerify={(token) => {
