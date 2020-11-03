@@ -11,7 +11,7 @@ import sqlite3 from 'sqlite3'
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '11mb',
+      sizeLimit: '50mb',
     },
   }
 }

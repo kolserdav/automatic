@@ -296,6 +296,7 @@ export default function Home(props) {
         continue;
       }
       nNewSize += allFiles[i].size;
+      console.log(nNewSize, fNewSize)
       if (fNewSize + nNewSize > allSize * 1000000) {
         err = true;
         setAlert({
