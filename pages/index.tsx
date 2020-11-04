@@ -287,7 +287,7 @@ export default function Home(props) {
         console.log('scrollBar', html.offsetWidth)
       });*/ 
     }
-  }, [files, buttonDisabled]);
+  }, [files, buttonDisabled, hBrowser]);
 
   const addFilesHandle = (e) => {
     const allFiles = e.target.files;
