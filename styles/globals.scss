@@ -224,6 +224,15 @@ label {
   text-decoration: underline;
 }
 
+.vcenter {
+  height: 100vh;
+  padding: auto 0 auto 0;
+}
+
+.gray {
+  color: $gray-color;
+}
+
 .popup {
   text-align: center;
   width: 100%;

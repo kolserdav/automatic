@@ -1,0 +1,17 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://automatic.uyem.ru/</loc>
+    <lastmod>2020-11-04T07:10:38+01:00</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://automatic.uyem.ru/rules</loc>
+    <lastmod>2020-11-04T07:10:38+01:00</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://automatic.uyem.ru/policy</loc>
+    <lastmod>2020-11-04T07:10:41+01:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+</urlset>
