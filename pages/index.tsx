@@ -10,6 +10,7 @@ import a from '../styles/home/Adv.module.scss'
 import e from '../styles/home/Enter.module.scss'
 import f from '../styles/home/Footer.module.scss'
 import t from '../styles/home/Task.module.scss'
+import newBrowser from '../styles/home/NewBrowser.module.scss'
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 import FaceIcon from '@material-ui/icons/Face'
 import StorageIcon from '@material-ui/icons/Storage'
@@ -72,6 +73,11 @@ const advIcon = {
 function toAnchor(selector) {
   var element = document.querySelector('#' + selector);
   element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function checkOldBrowser(window: WindowProxy) {
+  const canvas = window.document.createElement('canvas');
+  return canvas.getContext === undefined;
 }
 
 type MyButtonProps = {
@@ -159,6 +165,7 @@ export default function Home(props) {
     handleClose: () => {}
   };
 
+  const [ hBrowser, setHBrowser ] = useState(newBrowser);
   const [ name, setName ] = useState('');
   const [ email, setEmail ] = useState('');
   const [ desc, setDesc ] = useState('');
@@ -169,6 +176,7 @@ export default function Home(props) {
   const [ checkCaptcha, setChackCaptcha ] = useState(false);
   const [ showPopup, setShowPopup ] = useState(false);
   const [ progress, setProgress ] = useState(false);
+
 
   const sendTask = async (token: string) => {
     const deviceId = btoa(JSON.stringify({
@@ -268,13 +276,17 @@ export default function Home(props) {
   useEffect(() => {
     setShowPopup(cookies.a !== 'true');
     // TODO development mode
-    /*if (typeof window !== 'undefined') {
-      window.addEventListener('resize', () => {
+    if (typeof window !== 'undefined') {
+      const _isOld = checkOldBrowser(window);
+      if (_isOld) {
+        setHBrowser(require('../styles/home/OldBrowser.module.scss'));
+      }
+      /*window.addEventListener('resize', () => {
         const html = document.querySelector('html')
         console.log(document.body.clientWidth)
         console.log('scrollBar', html.offsetWidth)
-      }); 
-    }*/
+      });*/ 
+    }
   }, [files, buttonDisabled]);
 
   const addFilesHandle = (e) => {
@@ -346,7 +358,7 @@ export default function Home(props) {
           <meta http-equiv="X-UA-Compatible" content="IE=edge" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <header id="header" className={classnames(h.header)}>
+        <header id="header" className={classnames(hBrowser.header)}>
           <div className={classnames(h.shadow, 'column', 'center', 'fullScreen')}>
             <div className={classnames(h.headerText, 'centerText')}><h1>Автоматизация процессов обработки данных</h1></div>
             <div className={classnames(h.headerDescription, 'centerText')}>Создание простых и сложных скриптов выполняющих повторяющиеся действия при работе с данными на вашем ПК или веб сервисе</div>
@@ -419,7 +431,7 @@ export default function Home(props) {
                 <p>Зарегистрирован плательщиком налога на профессиональный доход в соответствии с Законом Республики Хакасия от 28.05.2020 № 16-ЗРХ «О введении в действие на территории Республики Хакасия специального налогового режима «Налог на профессиональный доход».</p>
               </div>
             </div>
-            <div className={p.personImage}></div>
+            <div className={hBrowser.personImage}></div>
           </div>
           <div id='advantages' className={classnames(a.advantages, 'fullScreen')}>
             <div className={'boldHeader'}>
@@ -456,7 +468,7 @@ export default function Home(props) {
               </div>
             </div>
           </div>
-          <div className={e.sendNow}>
+          <div className={hBrowser.sendNow}>
             <div className={e.wrapper}>
               <div className={e.header}><b>Закажите сегодня</b></div>
             </div>
@@ -584,7 +596,7 @@ export default function Home(props) {
                   setTimeout(() => {
                     setButtonDisabled(true);
                     setProgress(true);
-                  }, 250)
+                  }, 250);
                   setChackCaptcha(true);
                 }
               }} text="Заказать" />

@@ -58,21 +58,3 @@
   line-height: 1.5em;
   font-weight: 600;
 }
-
-.personImage {
-  border-radius: 12px;
-  margin: 20px;
-  width: 468px;
-  height: 439px;
-  position: relative;
-  background: url('../../public/img/home/person_background.webp');
-  background-repeat: no-repeat;
-	background-position: center;
-  background-size: cover;
-  @media(max-width: 468px) {
-    width: 300px;
-  }
-  @media(max-width: 300px) {
-    width: 250px;
-  }
-}
