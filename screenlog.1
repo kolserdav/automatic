@@ -1,134 +1,0 @@
-kspec@dev:~/node\[spec@dev node]$ sudo reboottop[Ksudo firewall-cmd --reloadzone=public --add-port=443/tcp --permanent[4P --permanent[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[28Pvim /etc/nginx/nginx.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csystemctl restart network[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[11Pvim /etc/hostssystemctl restart network[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[11Pvim /etc/hostssystemctl restart network[1P[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cstemctl restart networking[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[15Pnetplan applyvim /etc/hosts[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5P[C[C[C[C[C[C[C[C[C[C[C[C[C[Csudo vim /etc/nginx/nginx.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[10Pcertbot --nginxvim /etc/nginx/nginx.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[16Pvim /etc/hosts[5@sudo [C[C[C[C[C[C[C[C[C[C[C[C[C[C[1Pnetplan applysystemctl restart networking[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[4Ptemctl restart network[1@s[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[11Pvim /etc/hostssystemctl restart network[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[11Pvim /etc/hostssystemctl restart network[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cvim /etc/nginx/nginx.conf[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cfirewall-cmd --zone=public --add-port=443 --permanent/tcp --permanent[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Creload[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Ksudo firewall-cmd --zone=public --add-port=443/tcp --permanent[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ksce[Kreen -x node
-Attaching from inside of screen?
-kspec@dev:~/node\[spec@dev node]$ screen -x node
-Attaching from inside of screen?
-kspec@dev:~/node\[spec@dev node]$ screen -x node -y
-Use: screen [-opts] [cmd [args]]
- or: screen -r [host.tty]
-
-Options:
--4            Resolve hostnames only to IPv4 addresses.
--6            Resolve hostnames only to IPv6 addresses.
--a            Force all capabilities into each window's termcap.
--A -[r|R]     Adapt all windows to the new display width & height.
--c file       Read configuration file instead of '.screenrc'.
--d (-r)       Detach the elsewhere running screen (and reattach here).
--dmS name     Start as daemon: Screen session in detached mode.
--D (-r)       Detach and logout remote (and reattach here).
--D -RR        Do whatever is needed to get a screen session.
--e xy         Change command characters.
--f            Flow control on, -fn = off, -fa = auto.
--h lines      Set the size of the scrollback history buffer.
--i            Interrupt output sooner when flow control is on.
--l            Login mode on (update /var/run/utmp), -ln = off.
--ls [match]   or
--list         Do nothing, just list our SockDir [on possible matches].
--L            Turn on output logging.
--m            ignore $STY variable, do create a new screen session.
--O            Choose optimal output rather than exact vt100 emulation.
--p window     Preselect the named window if it exists.
--q            Quiet startup. Exits with non-zero return code if unsuccessful.
--Q            Commands will send the response to the stdout of the querying process.
--r [session]  Reattach to a detached screen process.
--R            Reattach if possible, otherwise start a new session.
--s shell      Shell to execute rather than $SHELL.
--S sockname   Name this session <pid>.sockname instead of <pid>.<tty>.<host>.
--t title      Set title. (window's name).
--T term       Use term as $TERM for windows, rather than "screen".
--U            Tell screen to use UTF-8 encoding.
--v            Print "Screen version 4.01.00devel (GNU) 2-May-06".
--wipe [match] Do nothing, just clean up SockDir [on possible matches].
--x            Attach to a not detached screen. (Multi display mode).
--X            Execute <cmd> as a screen command in the specified session.
-
-Error: Unknown option -y
-kspec@dev:~/node\[spec@dev node]$ screen -x node -y[K[K[K
-Attaching from inside of screen?
-kspec@dev:~/node\[spec@dev node]$ y
-bash: y: command not found
-kspec@dev:~/node\[spec@dev node]$ ps -aux
-USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root         1  0.0  0.3 128028  6668 ?        Ss   17:26   0:04 /usr/lib/system
-root         2  0.0  0.0      0     0 ?        S    17:26   0:00 [kthreadd]
-root         4  0.0  0.0      0     0 ?        S<   17:26   0:00 [kworker/0:0H]
-root         5  0.0  0.0      0     0 ?        S    17:26   0:00 [kworker/u2:0]
-root         6  0.0  0.0      0     0 ?        S    17:26   0:00 [ksoftirqd/0]
-root         7  0.0  0.0      0     0 ?        S    17:26   0:00 [migration/0]
-root         8  0.0  0.0      0     0 ?        S    17:26   0:00 [rcu_bh]
-root         9  0.0  0.0      0     0 ?        R    17:26   0:00 [rcu_sched]
-root        10  0.0  0.0      0     0 ?        S<   17:26   0:00 [lru-add-drain]
-root        11  0.0  0.0      0     0 ?        S    17:26   0:00 [watchdog/0]
-root        13  0.0  0.0      0     0 ?        S    17:26   0:00 [kdevtmpfs]
-root        14  0.0  0.0      0     0 ?        S<   17:26   0:00 [netns]
-root        15  0.0  0.0      0     0 ?        S    17:26   0:00 [khungtaskd]
-root        16  0.0  0.0      0     0 ?        S<   17:26   0:00 [writeback]
-root        17  0.0  0.0      0     0 ?        S<   17:26   0:00 [kintegrityd]
-root        18  0.0  0.0      0     0 ?        S<   17:26   0:00 [bioset]
-root        19  0.0  0.0      0     0 ?        S<   17:26   0:00 [bioset]
-root        20  0.0  0.0      0     0 ?        S<   17:26   0:00 [bioset]
-root        21  0.0  0.0      0     0 ?        S<   17:26   0:00 [kblockd]
-root        22  0.0  0.0      0     0 ?        S<   17:26   0:00 [md]
-root        23  0.0  0.0      0     0 ?        S<   17:26   0:00 [edac-poller]
-root        24  0.0  0.0      0     0 ?        S<   17:26   0:00 [watchdogd]
-root        26  0.0  0.0      0     0 ?        S    17:26   0:00 [kworker/u2:1]
-root        33  0.0  0.0      0     0 ?        S    17:26   0:00 [kswapd0]
-root        34  0.0  0.0      0     0 ?        SN   17:26   0:00 [ksmd]
-root        35  0.0  0.0      0     0 ?        SN   17:26   0:00 [khugepaged]
-root        36  0.0  0.0      0     0 ?        S<   17:26   0:00 [crypto]
-root        44  0.0  0.0      0     0 ?        S<   17:26   0:00 [kthrotld]
-root        45  0.0  0.0      0     0 ?        S<   17:26   0:00 [kmpath_rdacd]
-root        46  0.0  0.0      0     0 ?        S<   17:26   0:00 [kaluad]
-root        47  0.0  0.0      0     0 ?        S<   17:26   0:00 [kpsmoused]
-root        48  0.0  0.0      0     0 ?        S<   17:26   0:00 [ipv6_addrconf]
-root        61  0.0  0.0      0     0 ?        S<   17:26   0:00 [deferwq]
-root       115  0.0  0.0      0     0 ?        S    17:26   0:00 [kauditd]
-root       239  0.0  0.0      0     0 ?        S<   17:26   0:00 [ata_sff]
-root       243  0.0  0.0      0     0 ?        S    17:26   0:00 [scsi_eh_0]
-root       244  0.0  0.0      0     0 ?        S<   17:26   0:00 [scsi_tmf_0]
-root       245  0.0  0.0      0     0 ?        S    17:26   0:00 [scsi_eh_1]
-root       246  0.0  0.0      0     0 ?        S<   17:26   0:00 [scsi_tmf_1]
-root       250  0.0  0.0      0     0 ?        S<   17:26   0:00 [virtscsi-scan]
-root       251  0.0  0.0      0     0 ?        S    17:26   0:00 [scsi_eh_2]
-root       252  0.0  0.0      0     0 ?        S<   17:26   0:00 [scsi_tmf_2]
-root       262  0.0  0.0      0     0 ?        S<   17:26   0:00 [kworker/0:1H]
-root       273  0.0  0.0      0     0 ?        S    17:26   0:00 [jbd2/sda1-8]
-root       274  0.0  0.0      0     0 ?        S<   17:26   0:00 [ext4-rsv-conve
-root       376  0.0  0.1  39084  2276 ?        Ss   17:26   0:00 /usr/lib/system
-root       414  0.0  0.2 119184  4048 ?        Ss   17:26   0:00 /usr/sbin/lvmet
-root       419  0.0  0.2  47952  4972 ?        Ss   17:26   0:00 /usr/lib/system
-root       451  0.0  0.0      0     0 ?        S<   17:26   0:00 [ttm_swap]
-root       480  0.0  0.0      0     0 ?        S<   17:26   0:00 [loop0]
-root       484  0.0  0.0      0     0 ?        S<   17:26   0:00 [loop1]
-root       503  0.0  0.0      0     0 ?        S<   17:26   0:00 [loop2]
-root       512  0.0  0.0      0     0 ?        S<   17:26   0:00 [nfit]
-root       520  0.0  0.0  55532   848 ?        S<sl 17:26   0:00 /sbin/auditd
-root       543  0.0  0.1  44164  2036 ?        Ss   17:26   0:00 /usr/bin/qemu-g
-polkitd    547  0.0  0.5 612648 11620 ?        Ssl  17:26   0:00 /usr/lib/polkit
-dbus       548  0.0  0.1  66320  2472 ?        Ssl  17:26   0:00 /usr/bin/dbus-d
-chrony     552  0.0  0.1 120408  2080 ?        S    17:26   0:00 /usr/sbin/chron
-root       564  0.0  0.0  26384  1772 ?        Ss   17:26   0:00 /usr/lib/system
-root       574  0.0  1.4 358468 29276 ?        Ssl  17:26   0:00 /usr/bin/python
-root       900  0.0  0.1 102904  2356 ?        Ss   17:26   0:00 /sbin/dhclient 
-root       987  0.0  0.8 574304 17432 ?        Ssl  17:26   0:02 /usr/bin/python
-root       994  0.0  0.1 131148  2148 ?        Ss   17:26   0:00 nginx: master p
-nginx      995  0.0  0.2 132020  5456 ?        S    17:26   0:00 nginx: worker p
-root      1198  0.0  0.2 226744  4348 ?        Ssl  17:26   0:01 /usr/sbin/rsysl
-root      1200  0.0  0.2 112924  4348 ?        Ss   17:26   0:00 /usr/sbin/sshd 
-root      1202  0.0  0.0 110204   856 ttyS0    Ss+  17:26   0:00 /sbin/agetty --
-root      1205  0.0  0.0 126384  1664 ?        Ss   17:26   0:00 /usr/sbin/crond
-root      1206  0.0  0.0 110204   848 tty1     Ss+  17:26   0:00 /sbin/agetty --
-root      1485  0.0  0.2 158928  5660 ?        Ss   17:27   0:00 sshd: spec [pri
-spec      1489  0.0  0.1 158928  2832 ?        S    17:27   0:00 sshd: spec@pts/
-spec      1490  0.0  0.2 118892  5656 pts/0    Ss   17:27   0:00 -bash
-root      4183  0.0  0.0      0     0 ?        S    20:36   0:00 [kworker/0:0]
-spec      4508  0.0  0.0 128044  1640 ?        Ss   20:41   0:00 SCREEN -L -dmS 
-spec      4509  0.1  1.9 826616 39688 pts/1    Ssl+ 20:41   0:00 /home/spec/.nvm
-spec      4520  0.3  2.2 834340 45416 pts/1    Sl+  20:41   0:01 /home/spec/.nvm
-root      4531  0.0  0.0      0     0 ?        S    20:41   0:00 [kworker/0:2]
-spec      4551  0.0  0.0 127736  1192 pts/0    S+   20:46   0:00 screen -x node
-root      4553  0.0  0.0      0     0 ?        R    20:46   0:00 [kworker/0:1]
-spec      4554  0.1  0.2 119100  5640 pts/2    Ss   20:47   0:00 /bin/bash
-spec      4812  0.0  0.0 155476  1892 pts/2    R+   20:48   0:00 ps -aux
-kspec@dev:~/node\[spec@dev node]$ [K[spec@dev node]$ [K[spec@dev node]$ screen
-kspec@dev:~/node\[spec@dev node]$ exit
-exit

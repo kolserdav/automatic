@@ -23,6 +23,8 @@ import CloseIcon from '@material-ui/icons/Close'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { GoogleReCaptchaProvider, GoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useCookies } from 'react-cookie'
+import { GetServerSidePropsContext } from 'next'
+
 
 import { 
   ThemeProvider, 
@@ -75,9 +77,13 @@ function toAnchor(selector) {
   element.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function checkOldBrowser(window: WindowProxy) {
-  const canvas = window.document.createElement('canvas');
-  return canvas.getContext === undefined;
+async function checkOldBrowser() {
+  return await new Promise((resolve) => {
+    var img = new Image();
+    img.onload = function() { resolve(false); };
+    img.onerror = function() { resolve(true); };
+    img.src = 'img/check_webp.webp';
+  });
 }
 
 type MyButtonProps = {
@@ -98,7 +104,6 @@ type AlertProps = {
   handleClose: () => void
   button?: Element | null
 }
-
 
 const MyAlert = (props: AlertProps) => {
 
@@ -139,8 +144,8 @@ const MyAlert = (props: AlertProps) => {
   </Collapse>)
 };
 
-
 export async function getStaticProps() {
+  process.setMaxListeners(0);
   return {
     props: {
       apiKey: process.env.CAPTCHA_SITE
@@ -155,7 +160,6 @@ export default function Home(props) {
 
   const file: any = useRef();
   const checkbox: any = useRef();
-  const recaptchaRef: any = useRef();
 
   const initialAlert: AlertProps = {
     result: 'info',
@@ -176,9 +180,10 @@ export default function Home(props) {
   const [ checkCaptcha, setChackCaptcha ] = useState(false);
   const [ showPopup, setShowPopup ] = useState(false);
   const [ progress, setProgress ] = useState(false);
+  const [ _isOld, _setIsOld ] = useState(false);
 
 
-  const sendTask = async (token: string) => {
+  const sendTask = async (token: string | number) => {
     const deviceId = btoa(JSON.stringify({
       userAgent: navigator.userAgent,
       platform: navigator.platform
@@ -203,13 +208,14 @@ export default function Home(props) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'token': token
+        'token': token.toString()
       },
       body: JSON.stringify({
         device: deviceId,
         name: name,
         email: email,
         desc: desc,
+        _old: (token === 1)? 1 : undefined,
         files: fileReaders
       })
     })
@@ -273,22 +279,80 @@ export default function Home(props) {
       })
   }
 
-  useEffect(() => {
-    setShowPopup(cookies.a !== 'true');
-    // TODO development mode
-    if (typeof window !== 'undefined') {
-      const _isOld = checkOldBrowser(window);
-      if (!_isOld) {
-        const oldStyle = require('../styles/home/OldBrowser.module.scss');
-        setHBrowser(oldStyle);
-      }
-      /*window.addEventListener('resize', () => {
-        const html = document.querySelector('html')
-        console.log(document.body.clientWidth)
-        console.log('scrollBar', html.offsetWidth)
-      });*/ 
+  const sendTaskToServer = (token: string | number) => {
+    setAlert({
+      open: true,
+      message: 'Отправка данных на сервер...',
+      button: null,
+      result: 'info',
+      handleClose: () => { setAlert(initialAlert) }
+    });
+    sendTask(token);
+    setChackCaptcha(false);
+  };
+
+  const startProgress = () => {
+    setButtonDisabled(true);
+    setProgress(true);
+  };
+
+  /**
+   *  Обработка нажатия на кнопку Заказать
+   */
+
+  const handleClickSend = () => {
+    if (!name) {
+      setAlert({
+        result: 'warning',
+        message: `Имя не указано`,
+        open: true,
+        handleClose: () => { setAlert(initialAlert) }
+      });
     }
-  }, [files, buttonDisabled, hBrowser]);
+    else if (!email) {
+      setAlert({
+        result: 'warning',
+        message: `Почта не указана`,
+        open: true,
+        handleClose: () => { setAlert(initialAlert) }
+      });
+    }
+    else if (!email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+      setAlert({
+        result: 'warning',
+        message: `Почта имеет неверный формат`,
+        open: true,
+        handleClose: () => { setAlert(initialAlert) }
+      });
+    }
+    else if (!desc) {
+      setAlert({
+        result: 'warning',
+        message: `Описание не может быть пустым`,
+        open: true,
+        handleClose: () => { setAlert(initialAlert) }
+      });
+    }
+    else {
+      if (!_isOld) {
+        setAlert({
+          open: true,
+          message: 'Антиспам проверка...',
+          button: null,
+          result: 'info',
+          handleClose: () => { setAlert(initialAlert) }
+        });
+        setTimeout(() => {
+          startProgress();
+        }, 250);
+        setChackCaptcha(true);
+      }
+      else {
+        startProgress();
+        sendTaskToServer(1);
+      }
+    }
+  };
 
   const addFilesHandle = (e) => {
     const allFiles = e.target.files;
@@ -331,7 +395,27 @@ export default function Home(props) {
     }
     setFiles([...files]);
   };
-  
+
+  useEffect(() => {
+    setShowPopup(cookies.a !== 'true');
+    // TODO development mode
+    if (typeof window !== 'undefined') {
+      const _isOld = checkOldBrowser();
+      _isOld.then(d => {
+        if (d) {
+          const oldStyle = require('../styles/home/OldBrowser.module.scss');
+          setHBrowser(oldStyle);
+          _setIsOld(true);
+        }
+      });
+      /*window.addEventListener('resize', () => {
+        const html = document.querySelector('html')
+        console.log(document.body.clientWidth)
+        console.log('scrollBar', html.offsetWidth)
+      });*/ 
+    }
+  }, [files, buttonDisabled, hBrowser]);
+
   const title = 'Автоматизация процессов обработки данных';
   const description = 'Создание простых и сложных скриптов выполняющих повторяющиеся действия при работе с данными на вашем ПК или веб сервисе';
 
@@ -352,11 +436,11 @@ export default function Home(props) {
           <meta property="og:description" content={ description } />
           <meta property="og:site_name" content="Automaticuyem" />
           <meta property="og:image" content="https://automatic.uyem.ru/img/home/header_background_700.webp" />
-          <meta property="article:published_time" content="2020-11-3T13:16:59+01:00" />
+          <meta property="article:published_time" content="2020-11-5T11:12:52+01:00" />
           <meta property="article:author" content="Сергей Кольмиллер" />
           <meta name="google-site-verification" content="GOOGLEWM" />
           <meta name="yandex-verification" content="YANDEXWM" />
-          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <header id="header" className={classnames(hBrowser.header)}>
@@ -369,7 +453,7 @@ export default function Home(props) {
           <div className={classnames(n.notice, 'column', 'center', 'fullScreen')}>
             <div className={classnames(n.noticeBlock, 'column', 'center')}>
               <div className={n.line}></div>
-              <div className={classnames(n.textNotice, 'centerText')}><h1>Хотите сократить время на частых повторяющихся действиях при работе с данными, но не знаете с чего начать?</h1></div>
+              <div className={classnames(n.textNotice, 'centerText')}><h1>Здесь дела ведутся непостредственно с исполнителем.<br /> Никаких посредников!</h1></div>
               <div className={n.line}></div>
             </div>
             <div className={n.firstButton}>
@@ -414,7 +498,7 @@ export default function Home(props) {
                   <div className={classnames('boldDesc', 'paddingSmall')}><span>После окончания разработки и тестирования, программа встраивается в то место где она решает свою задачу.</span></div>
                 </div>
               </div>
-              <MyButton disabled={false} title='Перейти к форме заказа' onClick={() => { toAnchor('task') }} text="Отправить заявку" />
+              {!_isOld? <MyButton disabled={false} title='Перейти к форме заказа' onClick={() => { toAnchor('task') }} text="Отправить заявку" /> : '' }
             </div>
           </div>
           <div className={p.delimiter}></div>
@@ -553,65 +637,10 @@ export default function Home(props) {
               <p>Ознакомился и принимаю <Link href="/rules"><a target='_blank' className='textLink'>пользовательское соглашение</a></Link> и <Link href="/policy"><a target='_blank' className='textLink'>политику конфиденциальности</a></Link></p>
             </div>
             <div className={t.sendButton}>
-              <MyButton title="Отправить заявку" disabled={buttonDisabled} onClick={() => {
-                if (!name) {
-                  setAlert({
-                    result: 'warning',
-                    message: `Имя не указано`,
-                    open: true,
-                    handleClose: () => { setAlert(initialAlert) }
-                  });
-                }
-                else if (!email) {
-                  setAlert({
-                    result: 'warning',
-                    message: `Почта не указана`,
-                    open: true,
-                    handleClose: () => { setAlert(initialAlert) }
-                  });
-                }
-                else if (!email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-                  setAlert({
-                    result: 'warning',
-                    message: `Почта имеет неверный формат`,
-                    open: true,
-                    handleClose: () => { setAlert(initialAlert) }
-                  });
-                }
-                else if (!desc) {
-                  setAlert({
-                    result: 'warning',
-                    message: `Описание не может быть пустым`,
-                    open: true,
-                    handleClose: () => { setAlert(initialAlert) }
-                  });
-                }
-                else {
-                  setAlert({
-                    open: true,
-                    message: 'Антиспам проверка...',
-                    button: null,
-                    result: 'info',
-                    handleClose: () => { setAlert(initialAlert) }
-                  });
-                  setTimeout(() => {
-                    setButtonDisabled(true);
-                    setProgress(true);
-                  }, 250);
-                  setChackCaptcha(true);
-                }
-              }} text="Заказать" />
+              <MyButton title="Отправить заявку" disabled={buttonDisabled} onClick={handleClickSend} text="Заказать" />
               {checkCaptcha? <GoogleReCaptchaProvider reCaptchaKey={props.apiKey}>
                 <GoogleReCaptcha onVerify={(token) => {
-                  setAlert({
-                    open: true,
-                    message: 'Отправка данных на сервер...',
-                    button: null,
-                    result: 'info',
-                    handleClose: () => { setAlert(initialAlert) }
-                  });
-                  sendTask(token);
-                  setChackCaptcha(false);
+                  sendTaskToServer(token);
                 }} />
               </GoogleReCaptchaProvider> : ''}
             </div>

@@ -25,6 +25,7 @@ label {
 
 
 .container {
+  margin: 0;
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -39,7 +40,8 @@ label {
 }
 
 .column {
-  display: flex;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   flex-direction: column;
 }
 
@@ -53,8 +55,11 @@ label {
 }
 
 .center {
+  -ms-flex-align: center;
   justify-content: center;
   align-items: center;
+  -webkit-justify-content: center;
+  -webkit-align-items: center;
 }
 
 .start {
@@ -234,6 +239,7 @@ label {
 }
 
 .popup {
+  left: 0;
   text-align: center;
   width: 100%;
   padding: 12px;
