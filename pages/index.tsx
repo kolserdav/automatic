@@ -280,7 +280,6 @@ export default function Home(props) {
       const _isOld = checkOldBrowser(window);
       if (!_isOld) {
         const oldStyle = require('../styles/home/OldBrowser.module.scss');
-        console.log(oldStyle)
         setHBrowser(oldStyle);
       }
       /*window.addEventListener('resize', () => {
