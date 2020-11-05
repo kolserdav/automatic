@@ -1,0 +1,7 @@
+Cannot exec 'logs/out-1.0.0.log': No such file or directory
+Cannot exec 'logs/out-1.0.0.log': No such file or directory
+Cannot exec 'logs/out-1.0.0.log': No such file or directory
+[2K[1G[2m$ NODE_ENV=production next start[22m
+Loaded env from /home/spec/node/.env.local
+[32mready[39m - started server on http://localhost:3000
+^A  ^C

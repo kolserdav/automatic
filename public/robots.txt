@@ -1,7 +1,13 @@
 User-agent: Googlebot
 Allow: /
+Allow: /rules/
+Allow: /policy/
+Disallow: /unsubscribe/
 
 User-agent: *
 Allow: /
+Allow: /rules/
+Allow: /policy/
+Disallow: /unsubscribe/
 
 Sitemap: https://automatic.uyem.ru/sitemap.xml
