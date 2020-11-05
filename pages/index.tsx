@@ -278,8 +278,10 @@ export default function Home(props) {
     // TODO development mode
     if (typeof window !== 'undefined') {
       const _isOld = checkOldBrowser(window);
-      if (_isOld) {
-        setHBrowser(require('../styles/home/OldBrowser.module.scss'));
+      if (!_isOld) {
+        const oldStyle = require('../styles/home/OldBrowser.module.scss');
+        console.log(oldStyle)
+        setHBrowser(oldStyle);
       }
       /*window.addEventListener('resize', () => {
         const html = document.querySelector('html')
