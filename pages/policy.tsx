@@ -1,11 +1,18 @@
 import s from '../styles/rules/Rules.module.scss'
 import classnames from 'classnames'
 import Link from 'next/link'
+import Head from 'next/head'
 
 export default function Rules() {
   
   return (
     <div className={classnames(s.rules, 'column')}>
+      <Head>
+          <title>Политика конфиденциальности</title>
+          <meta name="robots" content="index,follow"></meta>
+          <meta name="description" content="Политика конфиденциальности сайта https://automatic.uyem.ru" />
+          <link rel="icon" href="/favicon.ico" />
+      </Head>
       <p>
         Политика конфиденциальности<br />
         Настоящая Политика конфиденциальности (далее — Политика) является приложением к <Link href="/rules"><a className={s.link}>Пользовательскому соглашению</a></Link> и определяет порядок обработки и защиты персональной информации о Пользователях, которую владелец ресурса Кольмиллер Сергей Давыдович («Администратор»), может получить во время использования ими сайта Администратора (далее — Сайт).<br />

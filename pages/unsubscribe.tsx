@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import queryString from 'query-string'
 import classnames from 'classnames'
+import Head from 'next/head'
 import {
   Button
 } from '@material-ui/core'
@@ -35,6 +36,14 @@ export default function Unsubscribe() {
   }, [])
 
   return (
-  <div className={classnames('column', 'center', 'text')}><p>{message}</p>{!_unsub? <Button color="primary" onClick={unsub}>Отписаться</Button> : ''}</div> 
+    <div className={classnames('column', 'center', 'text')}>
+      <Head>
+          <title>Отписаться</title>
+          <meta name="robots" content="noindex,nofollow"></meta>
+          <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <p>{message}</p>
+      {!_unsub? <Button color="primary" onClick={unsub}>Отписаться</Button> : ''}
+    </div> 
   );
 }

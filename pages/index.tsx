@@ -664,7 +664,6 @@ export default function Home(props) {
             <a onClick={() => { toAnchor('stages') }} className={f.link}>Процесс</a>
             <a onClick={() => { toAnchor('person') }} className={f.link}>Об авторе</a>
             <a onClick={() => { toAnchor('advantages') }} className={f.link}>Преимущества</a>
-            <a onClick={() => { toAnchor('task') }} className={f.link}>Форма заказа</a>
           </div>
           <div className={classnames(f.links, 'column', 'start')}>
             <Link href='/rules'><a className='nextLink'>Правила использования</a></Link>
