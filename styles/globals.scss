@@ -269,3 +269,44 @@ label {
   height: 100vh;
   background: black;
 }
+
+
+#f .f-btn-success{
+  color: cyan;
+  background-color: black;
+  border: none;
+  box-shadow: none;
+}
+
+#f .f-payment-method-card {
+  position: relative;
+  background: gray;
+  width: 100%;
+}
+
+#f .f-header {
+  display: none;
+}
+
+#f .f-info {
+  display: none;
+  width: 0;
+}
+
+#f .f-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: gray;
+}
+
+#f .f-wrapper:before {
+  content: '';
+  display: none;
+}
+
+#f .f-center {
+  padding: 0;
+  border: none;
+  width: 100%;
+}

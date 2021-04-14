@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
+import * as lib from './api/lib';
 import s from '../styles/rules/Rules.module.scss'
 import Head from 'next/head'
 import classnames from 'classnames'
+import axios from 'axios';
 //import CloudIpsp from 'cloudipsp-node-js-sdk';
 
 export default function Pay(props) {
   const { url } = props;
   const order_id = `order_id-${Math.random()}`;
+  const signature = lib.getHash(32);
   useEffect(() => {
     var Options = {
       options: {
@@ -29,12 +32,13 @@ export default function Pay(props) {
         amount: 100,
         order_desc: 'Тестовый платеж',
         order_id,
+        signature,
         response_url: 'https://automatic.uyem.ru/success',
         email: 'serega12101983@gmail.com',
         lang: 'en'
       },
     }
-    console.log(order_id);
+    console.log(order_id, signature);
     // @ts-ignore
     fondy("#app", Options);
   }, []);
@@ -56,25 +60,26 @@ export default function Pay(props) {
 }
 
 Pay.getInitialProps = async () => {
-  /*const fondy = new CloudIpsp(
-    {
-      merchantId: 1396424,
-      secretKey: 'test'
+  const order_id = 'order_id-0.06122492768106935';
+  const data = {
+    request: {
+      order_id,
+      merchant_id: 1474758,
+      signature: "250ceec5ea86bc606cee4354c0d7126d0a2ab045"
     }
-  )
-  const requestData = {
-    order_id: `order_id-${Math.random()}`,
-    order_desc: 'test order',
-    currency: 'USD',
-    amount: '1000'
-  }
-  const result = await new Promise((resolve) => {
-    fondy.Checkout(requestData).then(data => {
-      resolve(data.checkout_url);
-    }).catch((error) => {
-      resolve(error)
+  };
+  axios.post('https://pay.fondy.eu/api/status/order_id', {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data,
+  })
+    .then((d) => {
+      console.log(1, d.data);
     })
-  });*/
+    .catch((e) => {
+      console.error(2, e);
+    });
   return {
     props: {
       url: 'result',
