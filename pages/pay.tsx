@@ -38,11 +38,8 @@ export default function Pay(props) {
   return (
     <div className={classnames(s.rules, 'column')} >
       <Head>
-          <title>Соглашение</title>
-          <meta name="robots" content="index,follow"></meta>
-          <meta name="description" content="Пользовательское соглашение сайта https://automatic.uyem.ru" />
-          <meta property="article:published_time" content="2020-11-6T00:12:52+01:00" />
-          <meta property="article:author" content="Сергей Кольмиллер" />
+          <title>Оплата</title>
+          <meta name="robots" content="noindex,nofollow"></meta>
           <link rel="icon" href="/favicon.ico" />
           <script src="https://pay.fondy.eu/static_common/v1/checkout/ipsp.js"></script>
           <script src="https://pay.fondy.eu/latest/checkout.js"></script>
