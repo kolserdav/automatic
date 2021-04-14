@@ -4,10 +4,11 @@ import s from '../styles/rules/Rules.module.scss'
 import Head from 'next/head'
 import classnames from 'classnames'
 import axios from 'axios';
-//import CloudIpsp from 'cloudipsp-node-js-sdk';
+import CloudIpsp from 'cloudipsp-node-js-sdk';
+import { on } from 'process';
 
 export default function Pay(props) {
-  const { url } = props;
+  const { payUrl } = props;
   const order_id = `order_id-${Math.random()}`;
   const signature = lib.getHash(32);
   useEffect(() => {
@@ -18,7 +19,7 @@ export default function Pay(props) {
         cardIcons: ['mastercard', 'visa'],
         fields: false,
         title: 'Тест',
-        link: 'https://automatic.uyem.ru/pay',
+        link: payUrl,
         fullScreen: true,
         button: true,
         locales: ['ru', 'en', 'uk'],
@@ -41,7 +42,16 @@ export default function Pay(props) {
     }
     console.log(order_id, signature);
     // @ts-ignore
-    fondy("#app", Options);
+    fondy("#app", Options)
+      .$on('success', (da) => {
+        console.log(22, da.data.order.order_data.order_status)
+      })
+      .$on('end', (da) => {
+        console.log(232, da)
+      })
+      .$on('error', (er) => {
+        console.error(23, er)
+      });
   }, []);
   return (
     <div className={classnames(s.rules, 'column')} >
@@ -49,7 +59,6 @@ export default function Pay(props) {
           <title>Оплата</title>
           <meta name="robots" content="noindex,nofollow"></meta>
           <link rel="icon" href="/favicon.ico" />
-          <script src="https://pay.fondy.eu/static_common/v1/checkout/ipsp.js"></script>
           <script src="https://pay.fondy.eu/latest/checkout.js"></script>
           <script src="https://pay.fondy.eu/latest/i18n/ru.js"></script>
           <script src="https://pay.fondy.eu/latest/i18n/uk.js"></script>
@@ -62,28 +71,26 @@ export default function Pay(props) {
 
 Pay.getInitialProps = async () => {
   const order_id = 'order_id-0.3013041752126092';
-  const data = {
-    request: {
-      order_id,
-      merchant_id: 1474758,
-      signature: "045d9bffca74e4eb9f53e41c8a0ead79284be67c"
+  const fondy = new CloudIpsp(
+    {
+      merchantId: 1474758,
+      secretKey: '18N8ebRmZAayOYsa5MMh3AXNYz9cUBWE'
     }
-  };
-  axios.post('https://pay.fondy.eu/api/status/order_id', {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    data,
-  })
-    .then((d) => {
-      console.log(1, d.data);
+  )
+  const data = {
+    order_id: 'Your Order Id',
+    order_desc: 'test order',
+    currency: 'USD',
+    amount: '1000'
+  }
+  const payUrl = await new Promise((resolve) => {
+    fondy.Checkout(data).then(data => {
+      resolve(data.checkout_url)
+    }).catch((error) => {
+      resolve(error)
     })
-    .catch((e) => {
-      console.error(2, e);
-    });
+  });
   return {
-    props: {
-      url: 'result',
-    },
+    payUrl,
   };
 }
