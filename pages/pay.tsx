@@ -11,6 +11,7 @@ export default function Pay(props) {
   const order_id = `order_id-${Math.random()}`;
   const signature = lib.getHash(32);
   useEffect(() => {
+    document.cookie = "lang=ru";
     var Options = {
       options: {
         methods: ['card'],
@@ -35,7 +36,7 @@ export default function Pay(props) {
         signature,
         response_url: 'https://automatic.uyem.ru/success',
         email: 'serega12101983@gmail.com',
-        lang: 'en'
+        lang: 'ru'
       },
     }
     console.log(order_id, signature);
@@ -60,12 +61,12 @@ export default function Pay(props) {
 }
 
 Pay.getInitialProps = async () => {
-  const order_id = 'order_id-0.06122492768106935';
+  const order_id = 'order_id-0.3013041752126092';
   const data = {
     request: {
       order_id,
       merchant_id: 1474758,
-      signature: "250ceec5ea86bc606cee4354c0d7126d0a2ab045"
+      signature: "045d9bffca74e4eb9f53e41c8a0ead79284be67c"
     }
   };
   axios.post('https://pay.fondy.eu/api/status/order_id', {

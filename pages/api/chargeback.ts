@@ -2,7 +2,7 @@ import type express from 'express';
 import * as lib from './lib';
 
 export default async function Task(req: express.Request, res: express.Response) {
-  console.log('callback');
+  console.log('chargeback');
   console.log(1, req.params);
   console.log(2, req.body);
   console.log(3, req.headers);
