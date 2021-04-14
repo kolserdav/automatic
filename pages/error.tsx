@@ -8,7 +8,7 @@ export default function Error() {
   return (
     <div className={classnames(s.rules, 'column')}>
       <Head>
-          <title>Успешная оплата</title>
+          <title>Ошибка оплаты</title>
       </Head>
       К сожалению, мы не смогли принять ваш платеж.
       <Link href="/">На главную</Link>
