@@ -264,7 +264,7 @@ export default async function Task(req: express.Request, res: express.Response) 
     requireTLS: true,
     auth: {
       user: 'uyem.ru@gmail.com',
-      pass: 'syrymbhvyvnpwqqa',
+      pass: 'haunaitwbbhzjddb',
     },
   });
 
@@ -272,7 +272,7 @@ export default async function Task(req: express.Request, res: express.Response) 
 
   const userMessage = {
     from: 'automatic.uyem.ru',
-    to: (dev)? '19_pek@mail.ru' : email,
+    to: dev ? '19_pek@mail.ru' : email,
     subject: "Автоматический ответ c сайта",
     text: `Здравствуйте, ${name}. Ваша почта была указана в качестве контакта на сайте https://automatic.uyem.ru. Если это были Вы, просто проигнорируйте данное сообщение. Но если это были не Вы пожалуйста перейдите по ссылке ниже, чтобы мы больше не присылали Вам своих предложений: ${server}/unsubscribe?e=${email}&k=${key} .Ссылка действительна в течении ${KEY_DAYS} дней.`, 
     html: `Здравствуйте, ${name}. Ваша почта была указана в качестве контакта на сайте https://automatic.uyem.ru. Если это были Вы, просто проигнорируйте данное сообщение. Но если это были не Вы пожалуйста перейдите по <a href="${server}/unsubscribe?e=${email}&k=${key}">ссылке</a>, чтобы мы больше не присылали Вам своих предложений. <i>Ссылка действительна в течении ${KEY_DAYS} дней.</i>`

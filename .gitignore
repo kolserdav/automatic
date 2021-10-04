@@ -35,7 +35,9 @@ yarn-error.log*
 #
 
 files/*
+!files/.gitkeep
 database/*
+!database/.gitkeep
 logs/*
 tmp/
 

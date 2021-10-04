@@ -397,6 +397,9 @@ export default function Home(props) {
   };
 
   useEffect(() => {
+    if (buttonDisabled === undefined) {
+      setButtonDisabled(true)
+    };
     setShowPopup(cookies.a !== 'true');
     // TODO development mode
     if (typeof window !== 'undefined') {
