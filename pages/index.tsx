@@ -669,8 +669,8 @@ export default function Home(props) {
             <a onClick={() => { toAnchor('advantages') }} className={f.link}>Преимущества</a>
           </div>
           <div className={classnames(f.links, 'column', 'start')}>
-            <Link href='/rules'><a className='nextLink'>Правила использования</a></Link>
-            <Link href='/policy'><a className='nextLink'>Политика конфиденциальности</a></Link>
+            <Link href='/rules'><a className='nextLink' target="_blank">Правила использования</a></Link>
+            <Link href='/policy'><a className='nextLink' target="_blank">Политика конфиденциальности</a></Link>
           </div>
           <div className={f.copyright}>&copy; Все права защищены: {(() => { 
             const currentYear = new Date().getFullYear();
