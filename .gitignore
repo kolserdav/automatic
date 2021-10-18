@@ -40,4 +40,5 @@ database/*
 !database/.gitkeep
 logs/*
 tmp/
-
+.env
+next.config.js

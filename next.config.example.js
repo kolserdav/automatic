@@ -10,6 +10,6 @@ module.exports = {
   serverRuntimeConfig: {
     PROJECT_ROOT: __dirname,
     KEY_DAYS: 3,
-    CAPTCHA_SECRET: '6LcyON4ZAAAAAOswuVGu5V_bhDkIfYrUQLtJIk-Z'
+    CAPTCHA_SECRET: 'CAPTCHA secret'
   }
 }
