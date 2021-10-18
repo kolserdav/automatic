@@ -93,7 +93,11 @@ export default function Rules() {
         6. Заключительные положения<br />
         6.1. Настоящая Политика, отношения между Пользователем и Администратором, возникающие в связи с применением настоящей Политики, а также вопросы, не урегулированные настоящей Политикой, регулируются действующим законодательством Российской Федерации.<br />
         <br />
-        Редакция от 30.10.2020 г.<br />
+        7. В отношении пользователей сервиса <a href="https://yousearch.uyem.ru">https://yousearch.uyem.ru</a>
+        7.1 Используя сервис, вы подтверждаете согласие с условиями использования API Youtube <a href="https://www.youtube.com/static?gl=RU&template=terms">https://www.youtube.com/static?gl=RU&template=terms</a>
+        7.2 Используя сервис, вы подтверждаете согласие политикой конфиденциальности и условиями использования сервисами Google <a href="https://policies.google.com/privacy?hl=ru">https://policies.google.com/privacy?hl=ru</a>
+        <br />
+        Редакция от 18.10.2021 г.<br />
         <br />
       </p>
     </div>
