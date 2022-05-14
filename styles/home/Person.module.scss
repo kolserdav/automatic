@@ -21,6 +21,13 @@
   }
 }
 
+.link {
+  color: white; 
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .personDesc {
   max-width: 500px;
   margin: 40px;

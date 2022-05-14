@@ -515,6 +515,11 @@ export default function Home(props) {
                 <li className={p.personLi}>Более 20-ти успешно завершенных проектов;</li>
                 <li className={p.personLi}>Полный список навыков на ЯП Javascript...</li>
               </div>
+              <Link href="https://portfolio.uyem.ru">
+                <a className={p.link} href="https://portfolio.uyem.ru">
+                  Мое портфолио
+                </a>
+              </Link>
               <div className={p.personText}>
                 <p>Зарегистрирован плательщиком налога на профессиональный доход в соответствии с Законом Республики Хакасия от 28.05.2020 № 16-ЗРХ «О введении в действие на территории Республики Хакасия специального налогового режима «Налог на профессиональный доход».</p>
               </div>
