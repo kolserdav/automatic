@@ -15,7 +15,8 @@
     "deletedemails": "node scripts/getDeletedEmails.js",
     "keys": "node scripts/getKeys.js",
     "accesslog": "sudo cat /var/log/nginx/access.log",
-    "errorlog": "sudo cat /var/log/nginx/error.log"
+    "errorlog": "sudo cat /var/log/nginx/error.log",
+    "restart": "systemctl restart automatic"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
