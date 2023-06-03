@@ -19,33 +19,34 @@
     "restart": "systemctl restart automatic"
   },
   "dependencies": {
-    "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.56",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@material-ui/lab": "^4.0.0-alpha.61",
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "cloudipsp-node-js-sdk": "^1.0.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "next": "9.5.5",
+    "next": "12.1.2",
     "nodemailer": "^6.4.14",
     "query-string": "^6.13.6",
-    "react": "17.0.1",
+    "react": "17.0.2",
     "react-cookie": "^4.0.3",
-    "react-dom": "17.0.1",
-    "react-google-recaptcha-v3": "^1.7.0",
+    "react-dom": "17.0.2",
+    "react-google-recaptcha-v3": "^1.10.1",
     "sqlite3": "^5.0.0"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.10",
     "@types/cors": "^2.8.8",
-    "@types/node": "^14.14.2",
+    "@types/node": "^20.2.5",
     "@types/nodemailer": "^6.4.0",
     "@types/query-string": "^6.3.0",
-    "@types/react": "^16.9.53",
+    "@types/react": "^17.0.60",
+    "@types/react-dom": "^17.0.20",
     "@types/react-google-recaptcha": "^2.1.0",
     "@types/sqlite3": "^3.1.6",
     "sass": "^1.27.0",
-    "typescript": "^4.0.3"
+    "typescript": "^5.1.3"
   }
 }
