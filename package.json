@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "NODE_ENV=production next build",
-    "start": "NODE_ENV=production next start -p 3003",
+    "start": "NODE_ENV=production next start -p ${PORT}",
     "start:win": "set NODE_ENV=production && next start",
     "createtables": "node scripts/createTables.js",
     "prod": "echo logfile /home/spec/logs/out-${npm_package_version}.log > ~/.screenrc && screen -dmS node -L yarn start",
