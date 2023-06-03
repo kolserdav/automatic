@@ -38,10 +38,18 @@
 
 .addFile:hover {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+
+  &.disabled {
+    box-shadow: none;
+  }
 }
 
 .addFile:active {
   border: 2px solid $alert-color;
+
+  &.disabled {
+    border: 2px solid #fafafa;
+  }
 }
 
 .span {
