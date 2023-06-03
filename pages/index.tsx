@@ -23,12 +23,11 @@ import CloseIcon from '@material-ui/icons/Close'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { GoogleReCaptchaProvider, GoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useCookies } from 'react-cookie'
-import { GetServerSidePropsContext } from 'next'
 
 
 import { 
   ThemeProvider, 
-  createMuiTheme,
+  createTheme,
   Button,
   Collapse,
   LinearProgress
@@ -43,7 +42,7 @@ const maxSize = 5;
 const allSize = 10;
 const maxDesc = 14000;
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: '#104b5d'
@@ -570,17 +569,18 @@ export default function Home(props) {
         <div id='task' className={classnames(t.form, 'center', 'column')}>
           <div className="boldHeader">
             <h3>Форма заказа</h3>
+            <h4>Внимание! В настоящее время данная форма заказа не обслуживается, если вы хотите со мной связаться пожалуйста напишите на почту <u>admin@uyem.ru</u></h4>
           </div>
           <div className="boldDesc">
             <p>Пожалуйста опишите проблему, тогда я смогу предложить решение.</p>
           </div>
           <label className={t.label}>Ваше имя:</label>
-          <input value={name} maxLength={64} onChange={(e) => {setName(e.target.value)}} placeholder="Иван Иванович" className='textField'></input>
+          <input disabled value={name} maxLength={64} onChange={(e) => {setName(e.target.value)}} placeholder="Иван Иванович" className='textField'></input>
           <label className={t.label}>Ваша почта:</label>
-          <input value={email} maxLength={64} onChange={(e) => {setEmail(e.target.value)}} placeholder='example@mail.com' type='email' className='textField'></input>
+          <input disabled value={email} maxLength={64} onChange={(e) => {setEmail(e.target.value)}} placeholder='example@mail.com' type='email' className='textField'></input>
           <label className={t.label}>Описание:</label>
           <span className={t.span}>Максимальное количество символов: { maxDesc }</span>
-          <textarea value={desc} style={{height: `${tAHeight}em`}} maxLength={maxDesc} onChange={(e) => {
+          <textarea disabled value={desc} style={{height: `${tAHeight}em`}} maxLength={maxDesc} onChange={(e) => {
             const tAHeight = parseInt((e.target.value.length / 64).toFixed(0));
             if (tAHeight > 5) {
               setTAHeight(tAHeight);
@@ -588,15 +588,16 @@ export default function Home(props) {
             setDesc(e.target.value);
           }} placeholder='Нужно автоматизировать процесс. Описание в файле.' className="textarea"></textarea>
           <span className={t.span}>Максимольный размер { maxSize }Mб. Максимальный объем { allSize }Mб.</span>
-          <div className={classnames('row', 'center', t.addFile)}
+          <div className={classnames('row', 'center', t.addFile, t.disabled)}
             title='Добавить файлы'
             onClick={() => {
               file.current.click();
             }}
           >
-            <label className={t.label} style={{cursor: 'pointer' }}>Файлы:</label>
+            <label className={t.label} style={{cursor: 'not-allowed' }}>Файлы:</label>
             <AttachFileIcon style={{ fontSize: '2vh' }} color="error" />
             <input
+              disabled
               onChange={addFilesHandle} 
               ref={file} 
               hidden 
@@ -634,7 +635,7 @@ export default function Home(props) {
             }) }</div>
             <div className={classnames('row', 'center', 'text')}>
               <input 
-                disabled={progress}
+                disabled
                 ref={checkbox}
                 className='checkbox'
                 type="checkbox"
@@ -674,8 +675,8 @@ export default function Home(props) {
             <a onClick={() => { toAnchor('advantages') }} className={f.link}>Преимущества</a>
           </div>
           <div className={classnames(f.links, 'column', 'start')}>
-            <Link href='/rules'><a className='nextLink' target="_blank">Правила использования</a></Link>
-            <Link href='/policy'><a className='nextLink' target="_blank">Политика конфиденциальности</a></Link>
+            <Link href='/rules'><a className='nextLink'>Правила использования</a></Link>
+            <Link href='/policy'><a className='nextLink'>Политика конфиденциальности</a></Link>
           </div>
           <div className={f.copyright}>&copy; Все права защищены: {(() => { 
             const currentYear = new Date().getFullYear();
