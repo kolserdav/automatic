@@ -27,7 +27,7 @@
     "cloudipsp-node-js-sdk": "^1.0.5",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "next": "^14.2.21",
+    "next": "^14.2.25",
     "nodemailer": "^6.4.14",
     "query-string": "^6.13.6",
     "react": "17.0.2",
