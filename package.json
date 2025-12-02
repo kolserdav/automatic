@@ -28,7 +28,7 @@
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "next": "^14.2.26",
-    "nodemailer": "^6.4.14",
+    "nodemailer": "^7.0.11",
     "query-string": "^6.13.6",
     "react": "17.0.2",
     "react-cookie": "^4.0.3",
